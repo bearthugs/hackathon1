@@ -7,7 +7,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 # pipe = init_pipeline()
 socketio = SocketIO(app, cors_allowed_origins="*")
 connected_users = {}
@@ -22,11 +22,10 @@ def get_token():
             if rc == 0:
                 dict = {
                     "status": "success",
-                    "message": "/home",
-                    "token": token
+                    "message": "/home"
                 }
                 response = make_response(jsonify(dict))
-                response.set_cookie('session_id', token, path='/')
+                # response.set_cookie('session', token, path='/')
 
             else:
                 response = {
@@ -38,6 +37,7 @@ def get_token():
 @app.route('/create_room', methods=['POST'])
 def create_code():
     session_id = request.cookies.get('session_id')
+    print(session_id)
     data = request.json
     print(f"post request received {data}")
     return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
@@ -51,6 +51,7 @@ def text():
 def find_room():
     if request.method == 'POST': #button press
         session_id = request.cookies.get('session_id')
+        print(session_id)
         data = request.json
         print(f"post request received {data}")
         room_id = data['room_id']
@@ -82,6 +83,7 @@ def handle_connect():
     session_id = request.cookies.get('session_id')
     print(session_id)
     print('a user connected')
+
 
 @socketio.on('disconnect')
 def handle_disconnect():

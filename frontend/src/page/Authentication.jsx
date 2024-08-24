@@ -7,8 +7,6 @@ import { ReactComponent as MyIcon } from '../spotify-logo.svg';
 const handleClick = async (nav) => {
     const response = await getAuthentication()
     if (response.status === 200) {
-        document.cookie = `session_id=${response.data.token};path=/;max-age=3600`;
-        // console.log(response.data.token)
         nav('/home')
     }
 }
