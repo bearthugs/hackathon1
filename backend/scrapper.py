@@ -113,7 +113,7 @@ def get_lyrics_from_url(url: str) -> str:
     lyrics = lyrics_div.get_text(separator='\n')
     return lyrics.strip()
 
-def get_lyrics(artist_name: str, song_title: str) -> str | None:
+def get_lyrics(artist_name: str, song_title: str):
     sources = [
         get_azlyrics_url,
     ]
@@ -132,7 +132,7 @@ def get_lyrics(artist_name: str, song_title: str) -> str | None:
     print("Could not find the lyrics on any of the sources.")
     return None
 
-def format_lyrics(string: str) -> list[str] | None:
+def format_lyrics(string: str):
     lines = list(filter(None, string.splitlines()))
 
     return lines
