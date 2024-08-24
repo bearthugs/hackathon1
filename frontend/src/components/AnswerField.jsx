@@ -1,11 +1,16 @@
 import React from 'react';
 import { TextField } from '@mui/material';
+import { socket } from '../socket';
+import Cookies from "js-cookie";
 
-export const AnswerField = () => {
+export const AnswerField = (props) => {
+    const { code } = props
     const [answer, setAnswer] = React.useState('');
+    const sessionid = Cookies.get('session_id');
     const handleKeyPress = (e) => {
         if (e.keyCode === 13) {
             // some socket stuff here
+            socket.emit('input', { 'room_id': code, 'session_id': sessionid, 'message': answer })
             console.log(answer)
         }
     }
