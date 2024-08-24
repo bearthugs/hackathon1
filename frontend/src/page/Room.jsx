@@ -1,5 +1,6 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
+import * as React from 'react'
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Heading } from '../components/Heading';
 import { socket } from '../socket';
@@ -44,13 +45,13 @@ export const Room = () => {
     };
 
     return (
-        <Box>
-            <Heading theme='3em'>Your Room Code is:</Heading>
-            <Heading sx={{marginLeft:'30%'}} theme='5em'>{code}</Heading>
-            <>Waiting for players to join...</>
-            <Button variant="contained" color="primary" onClick={handleButtonClick}>
-                Emit Test Event
-            </Button>
+        <Box sx={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', gap:'30px' }}>
+          <Typography variant='h2'>Your Room Code is:</Typography>
+          <Typography variant='h3'>{code}</Typography>
+          <Typography variant='h4'>Waiting for players to join...</Typography>
+          <Button variant="contained" color="primary" onClick={handleButtonClick}>
+              Emit Test Event
+          </Button>
         </Box>
     );
 };

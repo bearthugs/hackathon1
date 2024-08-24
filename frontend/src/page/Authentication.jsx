@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { getAuthentication } from '../function'
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import { SpotifyIcon } from '../components/SpotifyIcon'
+import { ReactComponent as MyIcon } from '../spotify-logo.svg';
 const handleClick = async (nav) => {
     const response = await getAuthentication()
     if (response.status === 200) {
@@ -17,7 +17,7 @@ export const Authentication = () => {
     const nav = useNavigate()
     return (
         <Box sx={{ padding: '100px', display: 'flex', justifyContent: 'center'}} >
-            <Button variant='contained' size='large' onClick={() => handleClick(nav)}>Log in with Spotify!</Button>
+            <Button startIcon={<MyIcon />} variant='contained' size='large' onClick={() => handleClick(nav)}>Log in with Spotify!</Button>
         </Box>
     )
 }

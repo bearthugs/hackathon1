@@ -5,7 +5,7 @@ import Select from '@mui/material/Select';
 export const MySelect = styled(Select)({
   backgroundColor:'white',
   marginBottom: '10px',
-  fontSize: '1.3em'
+  fontSize: '1em'
 })
 
 export const FormBox = styled('form')(({ theme }) => ({
@@ -26,13 +26,13 @@ export const InputBox = styled('input')({
   marginBottom: '10px',
   padding: '20px',
   border: 'none',
-  fontSize: '1.1em'
+  fontSize: '1em'
 })
 
 export const LabelInput = styled('label')({
   marginRight: '10%',
   width: '100%',
-  fontSize: '1.5em'
+  fontSize: '1em'
 })
 
 
