@@ -31,9 +31,6 @@ def get_token():
                 }
             return jsonify(response)
 
-@app.route('/create_room')
-def create_code():
-    return model.generate_random_string(6)
 
 @app.route('/test', methods=['GET'])
 def text():
