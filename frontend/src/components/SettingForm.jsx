@@ -10,7 +10,7 @@ export const MySelect = styled(Select)({
 
 export const FormBox = styled('form')(({ theme }) => ({
   display: 'flex',
-  backgroundColor: theme.palette.secondary.main,
+  backgroundColor: theme.palette.secondary.light,
   width: '50%',
   padding: '50px',
   flexDirection: 'column',

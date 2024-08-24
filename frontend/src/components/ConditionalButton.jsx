@@ -12,6 +12,6 @@ export const ConditionalButton = () => {
     if (url.includes('authentication') || url.includes('home')) return null;
 
     return (
-        <Button variant='contained' onClick={() => nav('/home')}>Back</Button>
+        <Button variant='contained' sx={{ ml: '20px'}} onClick={() => nav('/home')}>Back</Button>
     )
 }
