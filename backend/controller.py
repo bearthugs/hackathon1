@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
 from flask import Flask
 from flask_cors import CORS
+
 from flask_socketio import SocketIO
 from decision_bot import init_pipeline
 
@@ -97,11 +98,18 @@ def handle_disconnect():
     print('user disconnected')
 
 @socketio.on('test')
-def handle_test(data):
-    print("receiveddd")
-    print('received test event with data:', data)
-    emit('userjoin', {'text': 'yutfhhfhfhfh'})
+def handle_test():
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
+    emit('room_emition', room=room_id, include_self=False)
 
+@socketio.on('join_room')
+def join():
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
+    join_room(room_id)
 
 
 # UNCHECKED SOCKET FUNCTIONS THAT REALLY DON'T ACTUALLY WORK
