@@ -3,6 +3,12 @@ import { TextField } from '@mui/material';
 
 export const AnswerField = () => {
     const [answer, setAnswer] = React.useState('');
+    const handleKeyPress = (e) => {
+        if (e.keyCode === 13) {
+            // some socket stuff here
+            console.log(answer)
+        }
+    }
     return (
       <TextField
         label="Your Answer"
@@ -27,6 +33,7 @@ export const AnswerField = () => {
           }
         }}
         onChange={(e) => setAnswer(e.target.value)}
+        onKeyUp={(e) => handleKeyPress(e)}
         // onKeyPress={handleKeyPress}={}
       />
     );
