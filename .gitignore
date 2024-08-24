@@ -2,3 +2,6 @@
 backend/__pycache__
 virtual_env
 /virtual_env/
+/virtual_env/bin/
+/virtual_env/lib/
+/virtual_env/pyvenv.cfg
