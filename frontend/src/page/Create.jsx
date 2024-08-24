@@ -17,6 +17,11 @@ export const Create = () => {
     const [diff, setDiff] = React.useState('easy');
     const [song, setSong] = React.useState(5);
 
+    const change = async (height, time, song, diff) => {
+        const response = await giveInfo(height, time, song, diff)
+        console.log(response)
+        nav(`/room/${response.data}`)
+      }
 
     const handleChange = (event) => {
         setDiff(event.target.value);
@@ -69,7 +74,7 @@ export const Create = () => {
             </MySelect>
         <MyButton theme={theme} variant='outlined'
         onClick={() => {
-          giveInfo(height, time, song, diff)
+          change(height, time, song, diff)
         }}>Create</MyButton>
       </FormBox>
 

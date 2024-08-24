@@ -31,9 +31,10 @@ def get_token():
                 }
             return jsonify(response)
 
-@app.route('/create_room')
+@app.route('/create_room', methods=['POST'])
 def create_code():
     session_id = request.cookies.get('session_id')
+    print(session_id)
     data = request.json
     print(f"post request received {data}")
     return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
