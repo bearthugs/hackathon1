@@ -93,6 +93,6 @@ def get_authentication(): #user object
         return -1
     user = User(username, tracks, session_id)
     online_users[session_id] = user #save user into dictionary by session id
-    return 0
+    return 0, session_id
     
     

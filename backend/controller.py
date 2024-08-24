@@ -18,11 +18,12 @@ def get_token():
         data = request.json
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
-            rc = model.get_authentication()
+            rc, token = model.get_authentication()
             if rc == 0:
                 response = {
                     "status": "success",
-                    "message": "/home"
+                    "message": "/home",
+                    "token": token
                 }
             else:
                 response = {
