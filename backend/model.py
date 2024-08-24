@@ -47,6 +47,7 @@ class Room:
         self.questions = [] # list of strings of the lyrics
         self.answers = []   # list of strings containing the answers // the song names
         self.players = players
+        self.current_players = 0
         self.current = 0 #current question number, starting from 1
         
 
@@ -57,19 +58,16 @@ class Room:
         return self.users
     
     def add_user(self, session):
-        if len(self.users) == 8:
+        if len(self.users) == self.players:
             return -1
         self.users.append(session)
-        self.players += 1
+        self.current_players += 1
 
     def rmv_user(self, session_id):
-        if len(self.users == 1):
+        if len(self.users) == 1:
             return -1
-        for user in self.users:
-            if user == session_id:
-                self.users.remove(user)
-            break
-        self.players -= 1
+        self.users.remove(session_id)
+        self.current_players -= 1
 
     def get_owner(self):
         return self.owner

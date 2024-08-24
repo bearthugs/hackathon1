@@ -60,6 +60,7 @@ def find_room():
             "status": "room full",
             "message": "/join"
             }
+            return make_response(jsonify(response), 400)
         elif rc == 1:
             # let them into the room
             message = "room/" + room_id
@@ -67,18 +68,20 @@ def find_room():
                 "status": "success",
                 "message": message
             }
+            return make_response(jsonify(response), 200)
         else:
             # don't let them into the room
             response = {
                 "status": "failure",
                 "message": "/join"
             }
-        return jsonify(response)
+            return make_response(jsonify(response), 404)
 
 
 @socketio.on('connect')
 def handle_connect():
-    print(request.sid)
+    session_id = request.cookies.get('session_id')
+    print(session_id)
     print('a user connected')
 
 @socketio.on('disconnect')
