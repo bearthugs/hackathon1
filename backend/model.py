@@ -44,8 +44,8 @@ class Room:
         self.difficulty = difficulty #check data type and stuff
         self.time = time
         self.no_questions = no_questions
-        self.questions = []
-        self.answers = []
+        self.questions = [] # list of strings of the lyrics
+        self.answers = []   # list of strings containing the answers // the song names
         self.players = players
         self.current = 0 #current question number, starting from 1
         
@@ -123,7 +123,11 @@ class Room:
     def get_answer(self):
         return self.answers[self.current-1]
 
-    
+'''
+we get the session_id (user),
+answer input from user,
+room_id for room
+'''
 
 def create_room(session, players, time, difficulty, songs):
     room = Room(session, time, songs, players, difficulty)
@@ -142,7 +146,16 @@ def find_room(room_id, session_id):
         return 1 # If the user has been successfully added to the room
     else:
         return 0 # The room does not exist
-
+    
+def check_answer(room_id, session_id, user_answer):
+    room_obj = online_rooms.get(room_id)
+    correct_answer = room_obj.get_answer()
+    if correct_answer == user_answer:
+        user_obj = online_users.get(session_id)
+        user_obj.increment_score()
+        room_obj.inc_question() # might not need this
+        return 1
+    return 0
 
 def get_authentication(): #user object
     username, tracks, session_id = scrapper.get_user_info()
