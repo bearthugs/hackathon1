@@ -1,9 +1,8 @@
 import scrapper
 
 class User:
-    def __init__(self, username, token, top_songs, session_id):
+    def __init__(self, username, top_songs, session_id):
         self.username = username
-        self.token = token
         self.top_songs = top_songs
         self.session_id = session_id #PK
         self.score = 0
@@ -25,8 +24,6 @@ class Room:
     
 
 
-def get_authentication(): #user object
-    access_token = scrapper.get_spotify_token()
-    tracks = scrapper.get_top_artists(access_token)["items"]
-    artist_names = [artist["name"] for artist in tracks]
-    # user = new User()
+def get_authentication(session_id): #user object
+    tracks = scrapper.get_list_tracks()
+    
