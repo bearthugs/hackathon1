@@ -1,5 +1,7 @@
 import scrapper
 
+online_users = dict()
+
 class User:
     def __init__(self, username, top_songs, session_id):
         self.username = username
@@ -9,9 +11,6 @@ class User:
     
     def get_username(self):
         return self.username
-    
-    def set_username(self, username):
-        self.username = username
     
     def get_top_songs(self):
         return self.top_songs
@@ -76,6 +75,12 @@ class Room:
     
 
 
-def get_authentication(session_id): #user object
-    tracks = scrapper.get_list_tracks()
+def get_authentication(): #user object
+    username, tracks, session_id = scrapper.get_user_info()
+    if session_id == False:
+        return -1
+    user = User(username, tracks, session_id)
+    online_users[session_id] = user #save user into dictionary by session id
+    return 0
+    
     
