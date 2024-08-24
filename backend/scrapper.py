@@ -11,7 +11,7 @@ class SpotifyAuthHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(b'Authorization code received. You can close this window.')
+        self.wfile.write(b'<html><body><script>window.close();</script></body></html>')
 
 def get_spotify_token() -> str:
     client_id = "f3978bd3f66d4f679d14b9db2ae0dca7"
