@@ -1,8 +1,11 @@
 import model
 import flask 
+import database
 
 app = flask.Flask(__name__, static_url_path='/static')
 app.config['SERVER_SOFTWARE'] = False
+# database.db_init()
+
 # socketio = flask.SocketIO(app)
 
 @app.route('/')

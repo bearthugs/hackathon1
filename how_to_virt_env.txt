@@ -1,7 +1,7 @@
 1. In your terminal, type in:
     python -m venv virtual_env
         OR  
-    python3 -m venve virtual_env
+    python3 -m venv virtual_env
 Try python first. If it doesn't work, use python3.
 DO NOT run both.
 
