@@ -11,8 +11,8 @@ export const Home = () => {
         document.cookie = `session_id=${data};path=/;max-age=3600`;
     });
     return (
-        <Box sx={{ padding: '30px', display: 'flex', justifyContent: 'center', height: '100%' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px', width: '100%', justifyContent: 'center', alignItems:'center', alignContent: 'center'}}>
+        <Box sx={{ padding: '30px', display: 'flex', justifyContent: 'center', height: '90vh', alignItems:'center', alignContent: 'center' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: '60px', width: '100%', justifyContent: 'center', alignItems:'center', alignContent: 'center'}}>
                 <RoomButton display='Create Room' location='/create' isCreate={true}></RoomButton>
                 <RoomButton display='Join Room' location='/join' isCreate={false}></RoomButton>
             </Box>
