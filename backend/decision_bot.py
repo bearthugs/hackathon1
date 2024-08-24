@@ -63,6 +63,8 @@ def pick_song(song_list):
             break
     return assistant_output
 
+pipe = init_pipeline()
+
 #example usage
 
 # pipe = init_pipeline()
