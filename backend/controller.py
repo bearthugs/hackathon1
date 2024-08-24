@@ -1,16 +1,13 @@
 import model
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_socketio import SocketIO, join_room, emit, leave_room
 
 app = Flask(__name__)
 CORS(app)
 
-# socketio = flask.SocketIO(app)
-
-# @app.route('/')
-# @app.route('/home')
-# def get_index():
-#     session_id = request.cookies.get('session_id')
+socketio = SocketIO(app)
+connected_users = {}
 
 @app.route('/authentication', methods=['GET', 'POST'])
 def get_token():
@@ -73,6 +70,13 @@ def find_room():
                 "message": "/join"
             }
         return jsonify(response)
+
+@socketio.on('connect')
+def connect():
+    session_id = request.cookies.get('session_id')
+    # room_id = user_id
+    
+    # emit("init_room_id", room_id)
 
 
 if __name__ == '__main__':
