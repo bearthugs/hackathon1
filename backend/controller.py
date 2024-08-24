@@ -74,12 +74,7 @@ def find_room():
                 "message": "/join"
             }
         return jsonify(response)
-    
-'''
-make another app.route that runs a socket for room.jsx
-sent them an on 'connect' that gives them the user's name
-then on the front end side, on connect, save the user
-'''
+
 
 @socketio.on('connect')
 def handle_connect():
