@@ -49,8 +49,8 @@ def get_spotify_token() -> str:
 
     return r.json()['access_token']
 
-def get_top_artists(access_token):
-    url = "https://api.spotify.com/v1/me/top/artists"
+def get_top_tracks(access_token):
+    url = "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50"
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
@@ -58,12 +58,12 @@ def get_top_artists(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-def main():
-    access_token = get_spotify_token()
-    print(access_token)
-    tracks = get_top_artists(access_token)["items"]
-    artist_names = [artist["name"] for artist in tracks]
-    print(artist_names)
 
-if __name__ == "__main__":
-    main()
+def get_list_tracks():
+    top_tracks_names = []
+    access_token = get_spotify_token()
+    tracks = get_top_tracks(access_token)["items"]
+    artist_track_tuples = [(artist['name'], track['name']) for track in tracks for artist in track['artists']]
+    for artist, track in artist_track_tuples:
+        top_tracks_names.append((artist, track))
+    return top_tracks_names
