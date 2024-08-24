@@ -58,12 +58,22 @@ def get_top_tracks(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-def get_list_tracks():
+def get_prof_name(access_token):
+    url = "https://api.spotify.com/v1/me"
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    response = requests.get(url, headers=headers)
+    return response.json()['display_name']
+
+
+def get_user_info():
     top_tracks_names = []
     access_token = get_spotify_token()
+    profile_name = get_prof_name(access_token)
     tracks = get_top_tracks(access_token)["items"]
     artist_track_tuples = [(artist['name'], track['name']) for track in tracks for artist in track['artists']]
     for artist, track in artist_track_tuples:
         top_tracks_names.append((artist, track))
-    return top_tracks_names
-
+    return profile_name, top_tracks_names
