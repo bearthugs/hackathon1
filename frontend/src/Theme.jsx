@@ -6,6 +6,12 @@ export const Theme = (mode) => createTheme({
     mode: mode,
     primary: {
       main: mode === 'dark' ? '#90caf9' : '#1976d2'
+    },
+    background: {
+      default: mode === 'dark' ? '#33272B' : '#FEF0F5'
+    },
+    secondary: {
+      main: '#ffffff'
     }
   }
 })
