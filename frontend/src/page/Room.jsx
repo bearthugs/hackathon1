@@ -4,11 +4,15 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Heading } from '../components/Heading';
 import { socket } from '../socket';
+import { NameBox, GeneralBox } from '../components/Names';
+import { useNavigate } from 'react-router-dom';
 
 export const Room = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
+    const [user, setUsers] = React.useState(['name1', 'ame2', 'nsmae3']);
+    const nav = useNavigate()
 
     React.useEffect(() => {
         socket.connect();
@@ -22,6 +26,12 @@ export const Room = () => {
 
         socket.on('userjoin', async (name) => {
             console.log(name);
+            // let newUsers = []
+            // for (const el of user) {
+            //   newUsers.push(el)
+            // }
+            // newUsers.push(name.text)
+            // setUsers(newUsers)
         });
 
         socket.on('disconnect', () => {
@@ -36,22 +46,36 @@ export const Room = () => {
     }, []);
 
     const handleButtonClick = () => {
-        if (socket.connected) {
-            socket.emit('test', 'yuhhhhhhhh');
-            console.log('Test event emitted');
-        } else {
-            console.log('Socket not connected');
-        }
+      if (socket.connected) {
+          socket.emit('test', 'yuhhhhhhhh');
+          console.log('Test event emitted');
+      } else {
+          console.log('Socket not connected');
+      }
     };
+
+    const handleStartGame = async(nav) => {
+      nav(`/game/${code}`)
+    }
 
     return (
         <Box sx={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', gap:'30px' }}>
           <Typography variant='h2'>Your Room Code is:</Typography>
           <Typography variant='h3'>{code}</Typography>
           <Typography variant='h4'>Waiting for players to join...</Typography>
-          <Button variant="contained" color="primary" onClick={handleButtonClick}>
+          <Button size='large' variant="contained" color="primary" onClick={() => {handleStartGame(nav)}}>Start Game!</Button>
+          <Typography sx={{fontWeight:'bold'}}>{user.length} Users have currently joined</Typography>
+          <NameBox> 
+            {user.map((fruit) => (
+                    <GeneralBox>
+                        {fruit}
+                    </GeneralBox>
+                ))
+          }</NameBox>
+
+          {/* <Button variant="contained" color="primary" onClick={handleButtonClick}>
               Emit Test Event
-          </Button>
+          </Button> */}
         </Box>
     );
 };

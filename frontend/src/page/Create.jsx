@@ -13,15 +13,15 @@ import { giveInfo } from '../function';
 export const Create = () => {
     const nav = useNavigate()
     const [height, setHeight] = React.useState(5);
-    const [time, setTime] = React.useState(15);
+    const [time, setTime] = React.useState(30);
     const [diff, setDiff] = React.useState('easy');
     const [song, setSong] = React.useState(5);
 
     const change = async (height, time, song, diff) => {
-        const response = await giveInfo(height, time, song, diff)
-        console.log(response)
-        nav(`/room/${response.data}`)
-      }
+      const response = await giveInfo(height, time, song, diff)
+      console.log(response)
+      nav(`/room/${response.data}`)
+    }
 
     const handleChange = (event) => {
         setDiff(event.target.value);

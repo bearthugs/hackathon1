@@ -21,6 +21,7 @@ export const Join = () => {
             nav(`/room/${code}`)
         } catch (error) {
             setError(error.status === 404 ? 'Incorrect Code' : 'Room Full')
+            console.log(error.message, error.status)
             setDeleteModal(true)
         }
     }
