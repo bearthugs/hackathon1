@@ -4,7 +4,6 @@ const URL = process.env.NODE_ENV === 'production' ? undefined : 'http://127.0.0.
 
 export const socket = io(URL, {
     transports: ['websocket'], // Ensure WebSocket transport is used
-    autoConnect: false,
     cors: {
         origin: "*",
     },

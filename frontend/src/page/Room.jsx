@@ -59,7 +59,7 @@ export const Room = () => {
     }
 
     return (
-        <Box sx={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', gap:'30px' }}>
+        <Box sx={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', gap:'30px', height: '90vh' }}>
           <Typography variant='h2'>Your Room Code is:</Typography>
           <Typography variant='h3'>{code}</Typography>
           <Typography variant='h4'>Waiting for players to join...</Typography>
