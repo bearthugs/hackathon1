@@ -176,10 +176,8 @@ def get_winner(room_id):
 
 def get_authentication(session_id): #user object
     username, tracks= scrapper.get_user_info()
-    if session_id == False:
-        return -1
     user = User(username, tracks, session_id)
     online_users[session_id] = user #save user into dictionary by session id
-    return 0, session_id
+    return
     
     

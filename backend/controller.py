@@ -7,9 +7,9 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}}, allow_credentials=True)
 # pipe = init_pipeline()
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", allow_credentials=True)
 connected_users = {}
 
 @app.route('/authentication', methods=['GET', 'POST'])
@@ -36,13 +36,16 @@ def get_token():
 
 @socketio.on('authenticated')
 def handle_auth():
+    print('setting sid')
+    print(request.sid)
     emit('set_sid', request.sid)
     model.get_authentication(request.sid)
 
 @app.route('/create_room', methods=['POST'])
 def create_code():
-    session_id = request.sid
     data = request.json
+    session_id = data['sid']
+    print(session_id)
     print(f"post request received {data}")
     return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
 

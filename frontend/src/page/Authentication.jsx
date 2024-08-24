@@ -4,11 +4,13 @@ import { getAuthentication } from '../function'
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { ReactComponent as MyIcon } from '../spotify-logo.svg';
+import Cookies from 'js-cookie';
 
 const handleClick = async (nav) => {
     const response = await getAuthentication()
     if (response.status === 200) {
-        document.cookie = `session_id=${response.data.token};path=/;max-age=3600`;
+        const sessionid = Cookies.get('session');
+        document.cookie = `session_id=${sessionid};path=/;max-age=3600`;
         // console.log(response.data.token)
         nav('/home')
     }
