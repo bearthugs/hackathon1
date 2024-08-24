@@ -14,21 +14,33 @@ export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
-    const [counter, setCounter] = React.useState(10);
-
-    const [lyrics, setLyrics] = React.useState([]);
-    socket.on('startGame', async (name) => {
-        console.log(name);
-        // setLyrics(newUsers)
-    })
+    const [counter, setCounter] = React.useState(5);
+    const [lyrics, setLyrics] = React.useState('');
+    
+   
     const nav = useNavigate()
     // Third Attempts
     React.useEffect(() => {
       const timer =
         counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-        counter == 0 && setCounter(10) && socket.emit('timeout')
+        if (counter == 0) {
+            setCounter(5)
+            socket.emit('timeout', code) 
+            socket.on('nextQuestion', async (question) => {
+                console.log('HI')
+                setLyrics(question.next)
+            })
+        }
       return () => clearInterval(timer);
     }, [counter]);
+
+    React.useEffect(() => {
+        socket.emit('startGame', code);
+        socket.on('firstQuestion', async (question) => {
+            // console.log
+            setLyrics(question.question)
+        })
+      }, []);
 
     // const handleButtonClick = () => {
     //     socket.emit('startGame', code);
@@ -38,12 +50,11 @@ export const Game = () => {
     return (
         <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
             <PlayerBox>
-                <h1>{lyrics.question}</h1>
             </PlayerBox>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', rowGap: '50px' }}>
                 <div>Countdown: {counter}</div>
                 <LyricBox>
-                    <Lyrics></Lyrics>
+                    <Lyrics lyric={lyrics}></Lyrics>
                 </LyricBox>
                 <AnswerField></AnswerField>
             </Box>
