@@ -15,6 +15,7 @@ export const Game = () => {
     url = url.split('/');
     const code = url[4];
     const [counter, setCounter] = React.useState(5);
+    const [users, setUsers] = React.useState([]);
     const [lyrics, setLyrics] = React.useState('');
     
    
@@ -56,7 +57,7 @@ export const Game = () => {
                 <LyricBox>
                     <Lyrics lyric={lyrics}></Lyrics>
                 </LyricBox>
-                <AnswerField code={code}></AnswerField>
+                <AnswerField code={code} nav={nav} setLyrics={setLyrics} setUsers={setUsers} users={users}></AnswerField>
             </Box>
             <PlayerBox>
                 <PeopleBox>

@@ -4,7 +4,7 @@ import { socket } from '../socket';
 import Cookies from "js-cookie";
 
 export const AnswerField = (props) => {
-    const { code } = props
+    const { code, nav, setLyrics, setUsers, users } = props
     const [answer, setAnswer] = React.useState('');
     const sessionid = Cookies.get('session_id');
     const handleKeyPress = (e) => {
@@ -12,7 +12,34 @@ export const AnswerField = (props) => {
             // some socket stuff here
             console.log(code)
             socket.emit('input', { 'room_id': code, 'session_id': sessionid, 'message': answer })
-            // console.log(answer)
+
+
+            socket.on('gameOver', async (question) => {
+              if (typeof question === 'object') {
+                nav(`/final/${code}`)
+              }
+            })
+
+           socket.on('nextQuestion', async (question) => {
+            if (typeof question === 'object') {
+              let usersNew = []
+              for (const user in users) {
+                if (user.name === question.username) {
+                  usersNew.push({name:user.name, score:question.score, answer:answer})
+                } else {
+                  usersNew.push(user)
+                }
+              }
+              setUsers(usersNew)
+              setLyrics(question.next)
+            }
+          })
+
+          socket.on('wrongAnswer', async (question) => {
+            if (typeof question === 'object') {
+              
+            }
+          })
         }
     }
     return (
