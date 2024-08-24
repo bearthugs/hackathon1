@@ -33,7 +33,7 @@ class User:
 class Room:
     def __init__(self, session, time, questions, players, difficulty):
         characters = string.ascii_letters + string.digits
-        self.id = ''.join(random.choices(characters, k=6))
+        self.id = (''.join(random.choices(characters, k=6))).upper()
         self.users = [session]
         self.owner = self.users[0]
         self.difficulty = difficulty #check data type and stuff
