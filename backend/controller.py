@@ -57,8 +57,8 @@ def text():
 @app.route('/join', methods = ['GET', 'POST'])
 def find_room():
     if request.method == 'POST': #button press
-        session_id = request.sid
         data = request.json
+        session_id = data['sid']
         print(f"post request received {data}")
         room_id = data['room_id']
         rc = model.find_room(room_id, session_id)

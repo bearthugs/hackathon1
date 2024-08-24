@@ -9,7 +9,8 @@ export async function getAuthentication() {
 
 export async function checkRoomId(code) {
     let response;
-    response = await axios.post('http://127.0.0.1:5000/join', { room_id: code })
+    const sessionid = Cookies.get('session_id');
+    response = await axios.post('http://127.0.0.1:5000/join', { room_id: code, sid: sessionid })
     return response
 }
 
