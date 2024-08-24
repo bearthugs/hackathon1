@@ -59,19 +59,22 @@ export const Create = () => {
         valueLabelDisplay="on"
       />
         {/* <InputBox name = 'password' placeholder={'Password'} type='password'onChange={(e) => setPassword(e.target.value)} onKeyUp={(e) => handleKeyPress(e, email, password, nav)}/> */}
-        <InputBox name = 'song' placeholder={'Number of Songs'} onChange={(e) => setSong(e.target.value)}/>
-          <MySelect
-            labelId="fontFamily"
-            id="fontFamily"
-            value = {diff}
-            name = 'fontFamily'
-            label= 'fontFamily'
-            onChange={handleChange}
-            >
-              <MenuItem value={'easy'}>Easy</MenuItem>
-              <MenuItem value={'medium'}>Medium</MenuItem>
-              <MenuItem value={'hard'}>Hard</MenuItem>
-            </MySelect>
+        <LabelInput>Number of Songs</LabelInput>
+        <InputBox name = 'song' placeholder={'5'} onChange={(e) => setSong(e.target.value)}/>
+        <LabelInput>Difficulty Levels</LabelInput>
+        <MySelect
+          labelId="fontFamily"
+          id="fontFamily"
+          value = {diff}
+          name = 'fontFamily'
+          label= 'fontFamily'
+          defaultValue={5}
+          onChange={handleChange}
+          >
+            <MenuItem value={'easy'}>Easy</MenuItem>
+            <MenuItem value={'medium'}>Medium</MenuItem>
+            <MenuItem value={'hard'}>Hard</MenuItem>
+          </MySelect>
         <MyButton theme={theme} variant='outlined'
         onClick={() => {
           change(height, time, song, diff)

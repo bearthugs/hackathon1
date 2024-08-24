@@ -1,5 +1,6 @@
 import * as React from 'react'
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Heading } from '../components/Heading';
 import { socket } from '../socket';
 
@@ -18,10 +19,10 @@ export const Room = () => {
   //   };
   // }, [])
     return (
-        <Box>
-          <Heading theme='3em'>Your Room Code is:</Heading>
-          <Heading sx={{marginLeft:'30%'}}theme='5em'>{code}</Heading>
-          <>Waiting for players to join...</>
+        <Box sx={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', gap:'30px' }}>
+          <Typography variant='h2'>Your Room Code is:</Typography>
+          <Typography variant='h3'>{code}</Typography>
+          <Typography variant='h4'>Waiting for players to join...</Typography>
         </Box>
     )
 }
