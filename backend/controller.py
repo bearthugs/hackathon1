@@ -9,14 +9,17 @@ CORS(app)
 
 # socketio = flask.SocketIO(app)
 
-@app.route('/')
-@app.route('/home')
-def get_index():
-    session_id = request.cookies.get('session_id')
+# @app.route('/')
+# @app.route('/home')
+# def get_index():
+#     session_id = request.cookies.get('session_id')
 
-@app.route('/authentication')
-def get_token(message):
-    print(f"post request received {message}")
+@app.route('/authentication', methods=['GET', 'POST'])
+def get_token():
+    if request.method == 'POST': #button press
+        data = request.json
+        print(f"post request received {data}")
+
 
 @app.route('/test', methods=['GET'])
 def text():
