@@ -18,10 +18,10 @@ export const Create = () => {
     const [song, setSong] = React.useState(5);
 
     const change = async (height, time, song, diff) => {
-        const response = await giveInfo(height, time, song, diff)
-        console.log(response)
-        nav(`/room/${response.data}`)
-      }
+      const response = await giveInfo(height, time, song, diff)
+      console.log(response)
+      nav(`/room/${response.data}`)
+    }
 
     const handleChange = (event) => {
         setDiff(event.target.value);

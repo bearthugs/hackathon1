@@ -1,6 +1,6 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
-export const NameBox = styled('box')(({ theme }) => ({
+export const NameBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   width: '100%',
   flexDirection: 'row',
@@ -10,7 +10,7 @@ export const NameBox = styled('box')(({ theme }) => ({
   color: 'white'
 }))
 
-export const GeneralBox = styled('box')(({ theme }) => ({
+export const GeneralBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   padding: '20px',
   backgroundColor: theme.palette.secondary.main,
