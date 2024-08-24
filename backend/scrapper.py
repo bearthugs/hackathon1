@@ -52,7 +52,7 @@ def get_spotify_token() -> str:
 
     return r.json()['access_token']
 
-def get_top_tracks(access_token):
+def get_top_tracks(access_token: str) -> dict:
     url = "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50"
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -61,7 +61,7 @@ def get_top_tracks(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-def get_prof_name(access_token):
+def get_prof_name(access_token: str) -> str:
     url = "https://api.spotify.com/v1/me"
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -71,7 +71,7 @@ def get_prof_name(access_token):
     return response.json()['display_name']
 
 
-def get_user_info():
+def get_user_info() -> tuple[str, list]:
     top_tracks_names = []
     access_token = get_spotify_token()
     profile_name = get_prof_name(access_token)
@@ -81,19 +81,19 @@ def get_user_info():
         top_tracks_names.append((artist, track))
     return profile_name, top_tracks_names
 
-def format_artist(name):
+def format_artist(name: str) -> str:
     name = re.sub(r'[^a-z0-9 ]', '', name.lower()).strip()
 
     return name
 
-def get_azlyrics_url(artist_name, song_title):
+def get_azlyrics_url(artist_name: str, song_title: str) -> str:
     artist_name = format_artist(artist_name)
     song_title = song_title.replace(" ", "").lower().strip()
     artist_name = artist_name.replace(" ", "").lower()
     url = f"https://www.azlyrics.com/lyrics/{artist_name}/{song_title}.html"
     return url
 
-def get_genius_lyrics(artist_name, song_title):
+def get_genius_lyrics(artist_name: str, song_title: str) -> Genius:
     genius = Genius("5rJ8VNSRjcdslxEmrwtLwIqIYSwi5aHagreHHC43tPyOHP4vUgWeAuTpr1SHTiVe")
     song = genius.search_song(song_title, artist_name)
     return song
@@ -104,7 +104,7 @@ def get_genius_lyrics(artist_name, song_title):
 #     url = f"https://www.musixmatch.com/lyrics/{artist_name}/{song_title}"
 #     return url
 
-def get_lyrics_from_url(url):
+def get_lyrics_from_url(url: str) -> str:
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     lyrics_div = soup.find('div', class_=None, id=None)
@@ -113,7 +113,7 @@ def get_lyrics_from_url(url):
     lyrics = lyrics_div.get_text(separator='\n')
     return lyrics.strip()
 
-def get_lyrics(artist_name, song_title):
+def get_lyrics(artist_name: str, song_title: str) -> str | None:
     sources = [
         get_azlyrics_url,
     ]
@@ -132,10 +132,13 @@ def get_lyrics(artist_name, song_title):
     print("Could not find the lyrics on any of the sources.")
     return None
 
-def format_lyrics(string):
+def format_lyrics(string: str) -> list[str] | None:
     lines = list(filter(None, string.splitlines()))
 
     return lines
+
+
+
 
 
 # Example usage
