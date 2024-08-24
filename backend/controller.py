@@ -116,6 +116,7 @@ def handle_user_join():
 def handle_game_start(data):
     room_id = data
     room_obj = model.online_rooms[room_id]
+    room_obj.set_questions()
     question = room_obj.get_question()
     emit('firstQuestion', {'question': question}) # giving game.jsx the first question
 
