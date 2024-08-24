@@ -17,7 +17,7 @@ export const Authentication = () => {
     const nav = useNavigate()
     return (
         <Box sx={{ padding: '100px', display: 'flex', justifyContent: 'center'}} >
-            <Button startIcon={<MyIcon />} variant='contained' size='large' onClick={() => handleClick(nav)}>Log in with Spotify!</Button>
+            <Button startIcon={<MyIcon />} variant='contained' size='large' sx={{ width: '50vw', height: '150px', fontSize:'2em', borderWidth: '5px' }} onClick={() => handleClick(nav)}>Log in with Spotify!</Button>
         </Box>
     )
 }
