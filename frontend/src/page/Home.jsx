@@ -10,7 +10,7 @@ export const Home = () => {
         <Box sx={{ padding: '30px', display: 'flex', justifyContent: 'center', height: '100%' }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '30px', width: '100%', justifyContent: 'center', alignItems:'center'}}>
                 <RoomButton display='Create Room' location='/create'></RoomButton>
-                <RoomButton display='Join Room' location='/join_room'></RoomButton>
+                <RoomButton display='Join Room' location='/join'></RoomButton>
             </Box>
         </Box>
     )
