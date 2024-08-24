@@ -5,10 +5,11 @@ from flask_socketio import SocketIO, join_room, emit, leave_room
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from decision_bot import init_pipeline
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, allow_credentials=True)
-# pipe = init_pipeline()
+pipe = init_pipeline()
 socketio = SocketIO(app, cors_allowed_origins="*", allow_credentials=True)
 connected_users = {}
 
@@ -117,7 +118,7 @@ def handle_user_join():
 def handle_game_start(data):
     room_id = data
     room_obj = model.online_rooms[room_id]
-    room_obj.set_questions()
+    room_obj.set_questions(pipe)
     question = room_obj.get_question()
     
     emit('firstQuestion', {'question': question}) # giving game.jsx the first question
