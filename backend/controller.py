@@ -14,17 +14,21 @@ CORS(app)
 
 @app.route('/authentication', methods=['GET', 'POST'])
 def get_token():
-    session = request.cookies.get('session_id')
     if request.method == 'POST': #button press
         data = request.json
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
-            response = model.get_authentication(session)
-            response = {
-                "status": "success",
-                "token": "dummy_token_123",
-                "message": "Authentication successful"
-            }
+            rc = model.get_authentication()
+            if rc == 0:
+                response = {
+                    "status": "success",
+                    "message": "/home"
+                }
+            else:
+                response = {
+                    "status": "failed",
+                    "message": "/authentication"
+                }
             return jsonify(response)
 
 
@@ -33,6 +37,17 @@ def text():
     print("hi")
     return jsonify({"message": "hello i work from flask"})
 
+@app.route('/join_room', methods = ['GET', 'POST'])
+def find_room():
+    if request.method == 'POST': #button press
+        '''
+        The user has pressed the button after inserting the room code (room id)
+        Get the room id from the message and search through the room objects
+        to find the corresponding room
+        '''
+        data = request.json
+        print(f"post request received {data}")
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-

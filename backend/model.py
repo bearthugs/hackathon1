@@ -1,4 +1,8 @@
 import scrapper
+import string
+import random
+
+online_users = dict()
 
 class User:
     def __init__(self, username, top_songs, session_id):
@@ -9,9 +13,6 @@ class User:
     
     def get_username(self):
         return self.username
-    
-    def set_username(self, username):
-        self.username = username
     
     def get_top_songs(self):
         return self.top_songs
@@ -29,9 +30,10 @@ class User:
         self.score = 0
 
 class Room:
-    def __init__(self, id, user, time, questions, players, difficulty):
-        self.id = id
-        self.users = [user]
+    def __init__(self, session, time, questions, players, difficulty):
+        characters = string.ascii_letters + string.digits
+        self.id = ''.join(random.choices(characters, k=6))
+        self.users = [session]
         self.owner = self.users[0]
         self.difficulty = difficulty #0 easy, 1 medium, 2 hard
         self.time = time
@@ -44,17 +46,17 @@ class Room:
     def get_users(self):
         return self.users
     
-    def add_user(self, user):
+    def add_user(self, session):
         if len(self.users) == 8:
             return -1
-        self.users.append(user)
+        self.users.append(session)
         self.players += 1
 
     def rmv_user(self, session_id):
         if len(self.users == 1):
             return -1
         for user in self.users:
-            if user.get_session_id == session_id:
+            if user == session_id:
                 self.users.remove(user)
             break
         self.players -= 1
@@ -80,6 +82,12 @@ class Room:
     
 
 
-def get_authentication(session_id): #user object
-    tracks = scrapper.get_list_tracks()
+def get_authentication(): #user object
+    username, tracks, session_id = scrapper.get_user_info()
+    if session_id == False:
+        return -1
+    user = User(username, tracks, session_id)
+    online_users[session_id] = user #save user into dictionary by session id
+    return 0
+    
     
