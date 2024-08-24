@@ -30,7 +30,7 @@ export const Room = () => {
             // for (const el of user) {
             //   newUsers.push(el)
             // }
-            // newUsers.push(name.text)
+            // newUsers.push(name.name)
             // setUsers(newUsers)
         });
 
@@ -46,12 +46,8 @@ export const Room = () => {
     }, []);
 
     const handleButtonClick = () => {
-      if (socket.connected) {
-          socket.emit('test', 'yuhhhhhhhh');
-          console.log('Test event emitted');
-      } else {
-          console.log('Socket not connected');
-      }
+      socket.emit('startGame', code);
+      handleStartGame(nav)
     };
 
     const handleStartGame = async(nav) => {
@@ -63,7 +59,7 @@ export const Room = () => {
           <Typography variant='h2'>Your Room Code is:</Typography>
           <Typography variant='h3'>{code}</Typography>
           <Typography variant='h4'>Waiting for players to join...</Typography>
-          <Button size='large' variant="contained" color="primary" onClick={() => {handleStartGame(nav)}}>Start Game!</Button>
+          <Button size='large' variant="contained" color="primary" onClick={() => {handleButtonClick}}>Start Game!</Button>
           <Typography sx={{fontWeight:'bold'}}>{user.length} Users have currently joined</Typography>
           <NameBox> 
             {user.map((fruit) => (
