@@ -14,6 +14,10 @@ export const Authentication = () => {
     return (
         <>
             <Button variant='Link' sx={{ backgroundColor: "green" }} onClick={() => handleClick()}>Click Me</Button>
+            <Button variant='contained' size='large' sx={{ margin: '30px' }}
+        onClick={() => {
+            nav('/home')
+        }}>Home</Button>
         </>
     )
 }
