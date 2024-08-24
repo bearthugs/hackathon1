@@ -2,6 +2,7 @@ import scrapper
 import string
 import random
 from decision_bot import get_songs, pick_song, pick_lyrics
+from flask_socketio import join_room
 
 online_users = dict()
 online_rooms = dict()
@@ -35,6 +36,9 @@ class User:
     def set_room_id(self, room_id):
         self.room_id = room_id
 
+    def get_room_id(self):
+        return self.room_id
+
 class Room:
     def __init__(self, session, time, no_questions, players, difficulty):
         characters = string.ascii_letters + string.digits
@@ -49,6 +53,9 @@ class Room:
         self.players = players
         self.current_players = 0
         self.current = 0 #current question number, starting from 1
+
+        user = online_users[session]
+        user.set_room_id(self.id)
         
 
     def get_id(self):
@@ -56,18 +63,20 @@ class Room:
 
     def get_users(self):
         return self.users
-    
+
     def add_user(self, session):
-        if len(self.users) == self.players:
+        if len(self.users) >= self.players:
             return -1
         self.users.append(session)
         self.current_players += 1
+        return 1
 
     def rmv_user(self, session_id):
         if len(self.users) == 1:
             return -1
         self.users.remove(session_id)
         self.current_players -= 1
+        return 1
 
     def get_owner(self):
         return self.owner
@@ -145,8 +154,7 @@ def find_room(room_id, session_id):
             user = online_users[session_id]
             user.set_room_id(room_id)
         return 1 # If the user has been successfully added to the room
-    else:
-        return 0 # The room does not exist
+    return 0 # The room does not exist
     
 def check_answer(room_id, session_id, user_answer):
     room_obj = online_rooms.get(room_id)
