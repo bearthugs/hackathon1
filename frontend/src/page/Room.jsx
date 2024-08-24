@@ -4,11 +4,13 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Heading } from '../components/Heading';
 import { socket } from '../socket';
+import { useNavigate } from 'react-router-dom';
 
 export const Room = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
+    const nav = useNavigate()
 
     React.useEffect(() => {
         socket.connect();
@@ -36,13 +38,17 @@ export const Room = () => {
     }, []);
 
     const handleButtonClick = () => {
-        if (socket.connected) {
-            socket.emit('test', 'yuhhhhhhhh');
-            console.log('Test event emitted');
-        } else {
-            console.log('Socket not connected');
-        }
+      if (socket.connected) {
+          socket.emit('test', 'yuhhhhhhhh');
+          console.log('Test event emitted');
+      } else {
+          console.log('Socket not connected');
+      }
     };
+
+    const handleStartGame = async(nav) => {
+      nav(`/game/${code}`)
+    }
 
     return (
         <Box sx={{ padding: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', gap:'30px' }}>
@@ -52,6 +58,7 @@ export const Room = () => {
           <Button variant="contained" color="primary" onClick={handleButtonClick}>
               Emit Test Event
           </Button>
+          <Button variant="contained" color="primary" onClick={() => {handleStartGame(nav)}}>Start Game</Button>
         </Box>
     );
 };
