@@ -1,4 +1,6 @@
 import scrapper
+import string
+import random
 
 online_users = dict()
 
@@ -72,7 +74,8 @@ class Room:
     def set_questions(self, questions):
         self.questions = questions
 
-    
+def create_room(players, time, difficulty, songs):
+    room = Room()
 
 
 def get_authentication(): #user object
