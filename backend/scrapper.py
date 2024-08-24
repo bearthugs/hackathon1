@@ -58,7 +58,6 @@ def get_top_tracks(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-
 def get_list_tracks():
     top_tracks_names = []
     access_token = get_spotify_token()
@@ -67,3 +66,4 @@ def get_list_tracks():
     for artist, track in artist_track_tuples:
         top_tracks_names.append((artist, track))
     return top_tracks_names
+
