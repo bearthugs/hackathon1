@@ -5,6 +5,8 @@ import { Toggle } from './components/Toggle';
 import { HeaderBox } from './components/HeaderBox';
 import { Theme } from './Theme';
 import { ThemeProvider, CssBaseline } from '@mui/material';
+import { Box, Button } from '@mui/material';
+import { ConditionalButton } from './components/ConditionalButton';
 import { socket } from './socket'; // Import the socket instance
 
 function App() {
@@ -16,18 +18,29 @@ function App() {
 
     const theme = Theme(darkMode ? 'dark' : 'light');
 
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <HeaderBox>
-                <h1>Spoti<em>FIGHT</em></h1>
-                <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange} />
-            </HeaderBox>
-            <BrowserRouter>
-                <Wrapper />
-            </BrowserRouter>
-        </ThemeProvider>
-    );
+  // useEffect(() => {
+  //   fetch('http://127.0.0.1:5000/test')
+  //     .then(response => response.json())
+  //     .then(json => setData(JSON.stringify(json)))
+  //     .catch(error => console.error('Error fetching data:', error));
+  // }, []);
+  // console.log(darkMode)
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+    <BrowserRouter>
+    <HeaderBox>
+            <h1>Spoti<em>FIGHT</em></h1>
+            {/* <pre>{data}</pre> */}
+            <Box>
+              <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+              <ConditionalButton variant='contained'>Back</ConditionalButton>
+            </Box>
+      </HeaderBox>
+    < Wrapper/>
+    </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App;
