@@ -79,7 +79,7 @@ def get_user_info():
     artist_track_tuples = [(artist['name'], track['name']) for track in tracks for artist in track['artists']]
     for artist, track in artist_track_tuples:
         top_tracks_names.append((artist, track))
-    return profile_name, top_tracks_names
+    return profile_name, top_tracks_names, access_token
 
 def format_artist(name):
     name = re.sub(r'[^a-z0-9 ]', '', name.lower()).strip()
