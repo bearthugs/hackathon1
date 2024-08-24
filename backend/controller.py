@@ -4,11 +4,13 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
 from flask import Flask
 from flask_cors import CORS
+
 from flask_socketio import SocketIO
+#from decision_bot import init_pipeline
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, allow_credentials=True)
-# pipe = init_pipeline()
+#pipe = init_pipeline()
 socketio = SocketIO(app, cors_allowed_origins="*", allow_credentials=True)
 connected_users = {}
 
@@ -96,35 +98,48 @@ def handle_disconnect():
     print('user disconnected')
 
 @socketio.on('test')
-def handle_test(data):
-    print("receiveddd")
-    print('received test event with data:', data)
-    emit('userjoin', {'text': 'yutfhhfhfhfh'})
+def handle_test():
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
+    emit('room_emition', room=room_id, include_self=False)
 
+@socketio.on('join_room')
+def join():
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
+    join_room(room_id)
 
 
 # UNCHECKED SOCKET FUNCTIONS THAT REALLY DON'T ACTUALLY WORK
 @socketio.on('newUser') # a new user has successfuly joined a chat room
 def handle_user_join():
     session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
     print(session_id)
     user_obj = model.online_users[session_id]
     username = user_obj.get_name()
 
-    emit('userjoin', {'name': username}) # giving room.jsx the user's username
+    emit('userjoin', {'name': username}, room=room_id, include_self=False) # giving room.jsx the user's username
 
 @socketio.on('startGame') # the game has started
 def handle_game_start(data):
-    room_id = data
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
     room_obj = model.online_rooms[room_id]
-    room_obj.set_questions()
+    room_obj.set_questions(pipe)
     question = room_obj.get_question()
+    
     emit('firstQuestion', {'question': question}) # giving game.jsx the first question
 
 @socketio.on('input')
 def handle_input(data):
-    room_id = data['room_id']
-    session_id = data['session_id']
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
     answer = data['message']
 
     rc = model.check_answer(room_id, session_id, answer)
@@ -147,13 +162,15 @@ def handle_input(data):
         else:
             emit('nextQuestion', {'next': question,
                                 'username': username,
-                                'score': score})
+                                'score': score}, room=room_id, include_self=False)
     else: # the answer was wrong
-        emit('wrongAnswer')
+        emit('wrongAnswer', room=room_id, include_self=False)
 
 @socketio.on('timeout')
 def handle_timeout(data):
-    room_id = data
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
     room_obj = model.online_rooms[room_id]
     room_obj.inc_question()
     question = room_obj.get_question()
@@ -162,15 +179,17 @@ def handle_timeout(data):
     # Need to check if this is the last question
     if current + 1 == no_question:
             winners = model.get_winner(room_id)
-            emit('gameOver', {'winner', winners})
+            emit('gameOver', {'winner', winners}, room=room_id, include_self=False)
     else:
         emit('nextQuestion', {'next': 'LYRIC CLAIRE',
                             'username': None,
-                            'score': 0})
+                            'score': 0}, room=room_id, include_self=False)
 
 @socketio.on('endGame')
 def handle_endGame(data):
-    room_id = data
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
     del model.online_rooms[room_id]
 
 

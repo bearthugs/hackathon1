@@ -14,7 +14,6 @@ def init_pipeline() -> Pipeline:
         "text-generation",
         model="google/gemma-2-2b-it",
         max_length=800,
-        device=mps_device,
     )
 
     if torch.backends.mps.is_available():
