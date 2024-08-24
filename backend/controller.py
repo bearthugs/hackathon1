@@ -77,7 +77,8 @@ def find_room():
 
 @socketio.on('connect')
 def handle_connect():
-    print(request.sid)
+    session_id = request.cookies.get('session_id')
+    print(session_id)
     print('a user connected')
 
 @socketio.on('disconnect')
