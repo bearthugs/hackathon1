@@ -1,9 +1,9 @@
-import { Switch, FormControlLabel } from '@mui/material'
+import { Switch } from '@mui/material'
 import * as React from 'react'
 
 export function Toggle({ darkMode, handleThemeChange }) {
   return (
-<Switch checked={darkMode} onChange={handleThemeChange}/>
+    <Switch sx={{ color: 'white' }} checked={darkMode} onChange={handleThemeChange}/>
   )
 }
 
