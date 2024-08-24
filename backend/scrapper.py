@@ -29,8 +29,11 @@ def get_spotify_token() -> str:
     server_address = ('', 7777)
     httpd = HTTPServer(server_address, SpotifyAuthHandler)
     httpd.handle_request()
-
-    auth_code = httpd.auth_code
+    
+    try:
+        auth_code = httpd.auth_code
+    except:
+        return
 
     encoded_credentials = base64.b64encode(client_id.encode() + b':' + client_secret.encode()).decode("utf-8")
 
@@ -49,8 +52,8 @@ def get_spotify_token() -> str:
 
     return r.json()['access_token']
 
-def get_top_artists(access_token):
-    url = "https://api.spotify.com/v1/me"
+def get_top_tracks(access_token):
+    url = "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50"
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
@@ -58,12 +61,22 @@ def get_top_artists(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-def main():
-    access_token = get_spotify_token()
-    print(access_token)
-    tracks = get_top_artists(access_token)["items"]
-    artist_names = [artist["name"] for artist in tracks]
-    print(artist_names)
+def get_prof_name(access_token):
+    url = "https://api.spotify.com/v1/me"
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
 
-if __name__ == "__main__":
-    main()
+    response = requests.get(url, headers=headers)
+    return response.json()['display_name']
+
+
+def get_user_info():
+    top_tracks_names = []
+    access_token = get_spotify_token()
+    profile_name = get_prof_name(access_token)
+    tracks = get_top_tracks(access_token)["items"]
+    artist_track_tuples = [(artist['name'], track['name']) for track in tracks for artist in track['artists']]
+    for artist, track in artist_track_tuples:
+        top_tracks_names.append((artist, track))
+    return profile_name, top_tracks_names, access_token

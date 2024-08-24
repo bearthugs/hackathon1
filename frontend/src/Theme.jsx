@@ -5,13 +5,10 @@ export const Theme = (mode) => createTheme({
   palette: {
     mode: mode,
     primary: {
-      main: mode === 'dark' ? '#90caf9' : '#1976d2'
+      main: mode === 'dark' ? '#F6B7CC' : '#EB6E98'
     },
     background: {
       default: mode === 'dark' ? '#33272B' : '#FEF0F5'
-    },
-    secondary: {
-      main: '#ffffff'
     }
   }
 })
