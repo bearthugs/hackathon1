@@ -130,7 +130,8 @@ def handle_game_start(data):
     user = model.online_users[session_id]
     room_id = user.get_room_id()
     room_obj = model.online_rooms[room_id]
-    room_obj.set_questions(pipe)
+    
+    # room_obj.set_questions(pipe)
     user_ids = room_obj.get_users()
 
     users = []
@@ -138,7 +139,8 @@ def handle_game_start(data):
         x = model.online_users[id]
         users.append(x.get_username())
 
-    question = room_obj.get_question()
+    # question = room_obj.get_question()
+    question = ['lyric1', 'lyric2', 'lyric3', 'lyric4']
     
     emit('firstQuestion', {'question': question, 'users': users}, room=room_id, include_self=False) # giving game.jsx the first question
 
