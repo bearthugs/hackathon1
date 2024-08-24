@@ -2,9 +2,11 @@ import model
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
+from decision_bot import init_pipeline
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+pipe = init_pipeline()
 
 socketio = SocketIO(app)
 connected_users = {}
@@ -16,6 +18,7 @@ def get_token():
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
             rc, token = model.get_authentication()
+            response.set_cookie('session_id', token, path='/')
             if rc == 0:
                 response = {
                     "status": "success",
@@ -29,9 +32,10 @@ def get_token():
                 }
             return jsonify(response)
 
-@app.route('/create_room')
+@app.route('/create_room', methods=['POST'])
 def create_code():
     session_id = request.cookies.get('session_id')
+    print(session_id)
     data = request.json
     print(f"post request received {data}")
     return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
@@ -77,6 +81,20 @@ def connect():
     # room_id = user_id
     
     # emit("init_room_id", room_id)
+
+#testing lyrics getting
+
+# from decision_bot import init_pipeline, get_songs, pick_lyrics, pick_song
+# from scrapper import get_user_info
+#
+# pipe = init_pipeline()
+# name, songs = get_user_info()
+# songs_list = get_songs(pipe, songs)
+# song = pick_song(pipe, songs_list)
+# lyrics = pick_lyrics(pipe, song)
+# print(lyrics)
+
+
 
 
 if __name__ == '__main__':

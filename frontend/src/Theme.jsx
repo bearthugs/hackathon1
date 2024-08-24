@@ -9,6 +9,9 @@ export const Theme = (mode) => createTheme({
     },
     background: {
       default: mode === 'dark' ? '#33272B' : '#FEF0F5'
-    }
+    },
+    secondary: {
+      main: '#FC8EAC'
+    },
   }
 })

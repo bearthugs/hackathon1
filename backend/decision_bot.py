@@ -1,10 +1,10 @@
 import torch
 from scrapper import get_lyrics, format_lyrics
-from transformers import pipeline
+from transformers import pipeline, Pipeline
 from huggingface_hub import login
 
 
-def init_pipeline():
+def init_pipeline() -> Pipeline:
 
     login("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")
 
@@ -23,7 +23,7 @@ def init_pipeline():
 
     return pipe
 
-def get_songs(track_list):
+def get_songs(pipe: Pipeline, track_list: list) -> str:
     messages = [
         {"role": "user", "content": f"Can you pick 10 random songs from these tracks, and give them in the format of ('artist_name', 'song_name') with saying anything else, just the list of songs, with no pre-amble while also randomising the order: {track_list}"},
     ]
@@ -36,7 +36,7 @@ def get_songs(track_list):
             break
     return assistant_output
 
-def pick_lyrics(song):
+def pick_lyrics(pipe: Pipeline, song: str) -> str:
     chosen_song = [part.replace('(', '').replace("'", '').replace(')', '') for part in song.split(', ')]
     lyrics = get_lyrics(chosen_song[0], chosen_song[1])
     lyrics = format_lyrics(lyrics)
@@ -51,7 +51,7 @@ def pick_lyrics(song):
             break
     return assistant_output
 
-def pick_song(song_list):
+def pick_song(pipe: Pipeline, song_list: str) -> str:
     messages = [
         {"role": "user", "content": f"Can you pick out a random song and its artist from the list of songs without any extra symbols, in the format of ('artist_name', 'song_name') and without any preamble: {song_list}"},
     ]
@@ -76,5 +76,4 @@ pipe = init_pipeline()
 # lyrics = pick_lyrics(song)
 #
 # print(lyrics)
-
 
