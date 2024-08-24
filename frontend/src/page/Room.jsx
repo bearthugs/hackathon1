@@ -4,12 +4,13 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Heading } from '../components/Heading';
 import { socket } from '../socket';
+import { NameBox, GeneralBox } from '../components/Names';
 
 export const Room = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
-
+    const [user, setUsers] = React.useState(['name1', 'ame2', 'nsmae3']);
     React.useEffect(() => {
         socket.connect();
         console.log("connecting");
@@ -22,6 +23,12 @@ export const Room = () => {
 
         socket.on('userjoin', async (name) => {
             console.log(name);
+            // let newUsers = []
+            // for (const el of user) {
+            //   newUsers.push(el)
+            // }
+            // newUsers.push(name.text)
+            // setUsers(newUsers)
         });
 
         socket.on('disconnect', () => {
@@ -49,9 +56,18 @@ export const Room = () => {
           <Typography variant='h2'>Your Room Code is:</Typography>
           <Typography variant='h3'>{code}</Typography>
           <Typography variant='h4'>Waiting for players to join...</Typography>
-          <Button variant="contained" color="primary" onClick={handleButtonClick}>
+          <Typography sx={{fontWeight:'bold'}}>{user.length} Users have currently joined</Typography>
+          <NameBox> 
+            {user.map((fruit) => (
+                    <GeneralBox>
+                        {fruit}
+                    </GeneralBox>
+                ))
+          }</NameBox>
+
+          {/* <Button variant="contained" color="primary" onClick={handleButtonClick}>
               Emit Test Event
-          </Button>
+          </Button> */}
         </Box>
     );
 };
