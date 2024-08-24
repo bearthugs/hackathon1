@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material';
 import { FormBox, LabelInput, InputBox } from '../components/SettingForm';
 import Button from '@mui/material/Button';
 import { checkRoomId } from '../function'
+import { socket } from '../socket';
 import { DialogDelete } from '../components/DialogError';
 
 export const Join = () => {
@@ -18,6 +19,9 @@ export const Join = () => {
     const handleClick = async (nav, code) => {
         try {
             const response = await checkRoomId(code)
+            socket.connect();
+            socket.emit('newUser', 'has joined');
+            console.log('hi')
             nav(`/room/${code}`)
         } catch (error) {
             setError(error.status === 404 ? 'Incorrect Code' : 'Room Full')

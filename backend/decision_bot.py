@@ -36,11 +36,17 @@ def get_songs(pipe: Pipeline, track_list: list) -> str:
             break
     return assistant_output
 
-def pick_lyrics(pipe: Pipeline, song: tuple) -> str:
+def pick_lyrics(pipe: Pipeline, song: tuple, difficulty) -> str:
     lyrics = get_lyrics(song[0], song[1])
     lyrics = format_lyrics(lyrics)
+    if difficulty == 1:
+        temp = 5
+    elif difficulty == 2:
+        temp = 3
+    elif difficulty == 3:
+        temp = 1
     messages = [
-        {"role": "user", "content": f"Can you pick out a random line from the lyrics of the song without any extra symbols, and without any preamble: {lyrics}"},
+        {"role": "user", "content": f"Can you pick out {temp} random consecutive line(s) from the lyrics of the song without any extra symbols, and without any preamble: {lyrics}"},
     ]
     output = pipe(messages)
     assistant_output = ""
