@@ -110,6 +110,7 @@ def handle_user_join():
     print(session_id)
     user_obj = model.online_users[session_id]
     username = user_obj.get_name()
+
     emit('userjoin', {'name': username}) # giving room.jsx the user's username
 
 @socketio.on('startGame') # the game has started
@@ -118,6 +119,7 @@ def handle_game_start(data):
     room_obj = model.online_rooms[room_id]
     room_obj.set_questions()
     question = room_obj.get_question()
+    
     emit('firstQuestion', {'question': question}) # giving game.jsx the first question
 
 @socketio.on('input')

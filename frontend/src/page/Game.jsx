@@ -7,6 +7,8 @@ import { startGame } from '../function';
 import { LyricBox } from '../components/LyricBox';
 import { AnswerField } from '../components/AnswerField';
 import { Lyrics } from '../components/Lyric';
+import { PeopleBox } from '../components/PeopleBox';
+import { useNavigate } from 'react-router-dom';
 
 export const Game = () => {
     let url = window.location.href;
@@ -14,18 +16,29 @@ export const Game = () => {
     const code = url[4];
     const [counter, setCounter] = React.useState(10);
 
+    const [lyrics, setLyrics] = React.useState([]);
+    socket.on('startGame', async (name) => {
+        console.log(name);
+        // setLyrics(newUsers)
+    })
+    const nav = useNavigate()
     // Third Attempts
     React.useEffect(() => {
       const timer =
         counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-        counter == 0 && setCounter(10)
+        counter == 0 && setCounter(10) && socket.emit('timeout')
       return () => clearInterval(timer);
     }, [counter]);
 
+    // const handleButtonClick = () => {
+    //     socket.emit('startGame', code);
+    //     handleStartGame(nav)
+    //   };
+
     return (
-        <Box sx={{ display: 'flex', padding:'30px', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
             <PlayerBox>
-                <h1>Box 1</h1>
+                <h1>{lyrics.question}</h1>
             </PlayerBox>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', rowGap: '50px' }}>
                 <div>Countdown: {counter}</div>
@@ -35,8 +48,22 @@ export const Game = () => {
                 <AnswerField></AnswerField>
             </Box>
             <PlayerBox>
-                <h1>Box 2</h1>
+                <PeopleBox>
+                    <b>player1</b>
+                    <br></br>
+                    <em>baybeh baybeh baybeh aw</em>
+                    <br></br>
+                    <Box>Score: 1</Box>
+                </PeopleBox>
+                <PeopleBox>
+                    <b>player2</b>
+                    <br></br>
+                    <em>baybeh baybeh baybeh aw</em>
+                    <br></br>
+                    <Box>Score: 1</Box>
+                </PeopleBox>
             </PlayerBox>
+            {/* <Button size='large' variant="contained" color="primary" onClick={() => {nav(`/final/${code}`)}}>Home</Button> */}
         </Box>
     )
 }
