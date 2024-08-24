@@ -33,7 +33,7 @@ class User:
 class Room:
     def __init__(self, session, time, questions, players, difficulty):
         characters = string.ascii_letters + string.digits
-        self.id = ''.join(random.choices(characters, k=6))
+        self.id = (''.join(random.choices(characters, k=6))).upper()
         self.users = [session]
         self.owner = self.users[0]
         self.difficulty = difficulty #check data type and stuff
@@ -93,6 +93,6 @@ def get_authentication(): #user object
         return -1
     user = User(username, tracks, session_id)
     online_users[session_id] = user #save user into dictionary by session id
-    return 0
+    return 0, session_id
     
     

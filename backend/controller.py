@@ -18,11 +18,12 @@ def get_token():
         data = request.json
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
-            rc = model.get_authentication()
+            rc, token = model.get_authentication()
             if rc == 0:
                 response = {
                     "status": "success",
-                    "message": "/home"
+                    "message": "/home",
+                    "token": token
                 }
             else:
                 response = {
@@ -45,16 +46,34 @@ def text():
     print("hi")
     return jsonify({"message": "hello i work from flask"})
 
-@app.route('/join_room', methods = ['GET', 'POST'])
+@app.route('/join', methods = ['GET', 'POST'])
 def find_room():
     if request.method == 'POST': #button press
-        '''
-        The user has pressed the button after inserting the room code (room id)
-        Get the room id from the message and search through the room objects
-        to find the corresponding room
-        '''
+        session_id = request.cookies.get('session_id')
         data = request.json
         print(f"post request received {data}")
+        room_id = data['room_id']
+        if room_id in model.online_rooms:
+            room_obj = model.online_rooms.get(room_id)
+            if room_obj.add_user(session_id) == -1:
+                response = {
+                "status": "room full",
+                "message": "/join"
+                }
+            else:
+                # let them into the room
+                message = "room/" + room_id
+                response = {
+                    "status": "success",
+                    "message": message
+                }
+        else:
+            # don't let them into the room
+            response = {
+                "status": "failure",
+                "message": "/join"
+            }
+        return jsonify(response)
 
 
 if __name__ == '__main__':
