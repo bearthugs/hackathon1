@@ -50,7 +50,7 @@ def get_spotify_token() -> str:
     return r.json()['access_token']
 
 def get_top_artists(access_token):
-    url = "https://api.spotify.com/v1/me/top/artists"
+    url = "https://api.spotify.com/v1/me"
     headers = {
         "Authorization": f"Bearer {access_token}"
     }
