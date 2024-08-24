@@ -53,20 +53,19 @@ def find_room():
         data = request.json
         print(f"post request received {data}")
         room_id = data['room_id']
-        if room_id in model.online_rooms:
-            room_obj = model.online_rooms.get(room_id)
-            if room_obj.add_user(session_id) == -1:
-                response = {
-                "status": "room full",
-                "message": "/join"
-                }
-            else:
-                # let them into the room
-                message = "room/" + room_id
-                response = {
-                    "status": "success",
-                    "message": message
-                }
+        rc = model.find_room(room_id, session_id)
+        if rc == -1:
+            response = {
+            "status": "room full",
+            "message": "/join"
+            }
+        elif rc == 1:
+            # let them into the room
+            message = "room/" + room_id
+            response = {
+                "status": "success",
+                "message": message
+            }
         else:
             # don't let them into the room
             response = {

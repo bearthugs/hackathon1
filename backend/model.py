@@ -86,6 +86,15 @@ def create_room(session, players, time, difficulty, songs):
     online_rooms[id] = room
     return id
 
+def find_room(room_id, session_id):
+    if room_id in online_rooms:
+        room_obj = online_rooms.get(room_id)
+        if room_obj.add_user(session_id) == -1: # If there are already 8 people in the room
+            return -1
+        return 1 # If the user has been successfully added to the room
+    else:
+        return 0 # The room does not exist
+
 
 def get_authentication(): #user object
     username, tracks, session_id = scrapper.get_user_info()
