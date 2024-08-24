@@ -16,4 +16,4 @@ Obviously, this installs Flask.
 Okay, you're good to go, good luck
 
 
-flask --app backend/controller.py run --port=5050
+python3 ./backend/controller.py
