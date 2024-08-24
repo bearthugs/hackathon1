@@ -4,6 +4,7 @@ import { getAuthentication } from '../function'
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import { ReactComponent as MyIcon } from '../spotify-logo.svg';
+
 const handleClick = async (nav) => {
     const response = await getAuthentication()
     if (response.status === 200) {

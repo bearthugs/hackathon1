@@ -8,6 +8,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { Box, Button } from '@mui/material';
 import { ConditionalButton } from './components/ConditionalButton';
 import { socket } from './socket'; // Import the socket instance
+import SportsMmaIcon from '@mui/icons-material/SportsMma';
 
 function App() {
     const [darkMode, setDarkMode] = useState(false);
@@ -30,7 +31,11 @@ function App() {
       <CssBaseline/>
     <BrowserRouter>
     <HeaderBox>
+          <Box>
             <h1>Spoti<em>FIGHT</em></h1>
+            {/* <SportsMmaIcon/> */}
+          </Box>
+            
             {/* <pre>{data}</pre> */}
             <Box>
               <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange}/>
