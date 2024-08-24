@@ -1,0 +1,16 @@
+1. In your terminal, type in:
+    python -m venv virtual_env
+        OR  
+    python3 -m venve virtual_env
+Try python first. If it doesn't work, use python3.
+DO NOT run both.
+
+2. Then, type in:
+    source virtual_env/bin/activate
+This actually lets you now use the virtual
+environment you just created
+
+3. Next, while you're IN THE VIRTUAL ENVIRONMENT:
+    pip install Flask
+Obviously, this installs Flask.
+Okay, you're good to go, good luck
