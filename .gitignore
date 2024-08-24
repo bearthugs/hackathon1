@@ -1,4 +1,7 @@
 .idea
 backend/__pycache__
 virtual_env
-ve
+/virtual_env/
+/virtual_env/bin/
+/virtual_env/lib/
+/virtual_env/pyvenv.cfg
