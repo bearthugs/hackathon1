@@ -17,9 +17,11 @@ export const Join = () => {
     const handleClick = async (nav, code) => {
         console.log(code)
         const response = await checkRoomId(code)
-        if (response.status === 'success') {
+        if (response.status === 200) {
             console.log(code)
             // nav('/room/' + code)
+        } else {
+            console.log(response.status)
         }
     }
 

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const handleClick = async (nav) => {
     const response = await getAuthentication()
     if (response.status === 200) {
+        document.cookie = `session_id=${response.token}`;
         nav('/home')
     }
 }
