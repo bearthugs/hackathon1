@@ -26,12 +26,13 @@ export const Room = () => {
 
         socket.on('userjoin', async (name) => {
             console.log(name);
-            // let newUsers = []
-            // for (const el of user) {
-            //   newUsers.push(el)
-            // }
-            // newUsers.push(name.name)
-            // setUsers(newUsers)
+            let newUsers = []
+            for (const el of user) {
+              newUsers.push(el)
+            }
+            newUsers.push(name.name)
+            console.log(name)
+            setUsers(newUsers)
         });
 
         socket.on('disconnect', () => {

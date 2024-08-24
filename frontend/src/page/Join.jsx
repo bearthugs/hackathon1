@@ -21,6 +21,7 @@ export const Join = () => {
             const response = await checkRoomId(code)
             socket.connect();
             socket.emit('newUser', 'has joined');
+            console.log('hi')
             nav(`/room/${code}`)
         } catch (error) {
             setError(error.status === 404 ? 'Incorrect Code' : 'Room Full')

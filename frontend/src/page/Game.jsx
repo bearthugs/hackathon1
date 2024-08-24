@@ -15,7 +15,12 @@ export const Game = () => {
     url = url.split('/');
     const code = url[4];
     const [counter, setCounter] = React.useState(10);
-    const [lyrics, setLyrics] = React.useState(/*first value*/)
+
+    const [lyrics, setLyrics] = React.useState([]);
+    socket.on('startGame', async (name) => {
+        console.log(name);
+        // setLyrics(newUsers)
+    })
     const nav = useNavigate()
     // Third Attempts
     React.useEffect(() => {
@@ -33,7 +38,7 @@ export const Game = () => {
     return (
         <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
             <PlayerBox>
-                <h1>Box 1</h1>
+                <h1>{lyrics.question}</h1>
             </PlayerBox>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', rowGap: '50px' }}>
                 <div>Countdown: {counter}</div>
