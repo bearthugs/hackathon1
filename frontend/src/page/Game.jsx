@@ -9,9 +9,18 @@ export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
+    const [counter, setCounter] = React.useState(60);
+
+    // Third Attempts
+    React.useEffect(() => {
+      const timer =
+        counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+      return () => clearInterval(timer);
+    }, [counter]);
 
     return (
         <Box sx={{ display: 'flex', padding:'30px'}}>
+             <div>Countdown: {counter}</div>
             <PlayerBox>
                 <h1>hi</h1>
             </PlayerBox>
