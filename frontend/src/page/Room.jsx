@@ -59,7 +59,7 @@ export const Room = () => {
           <Typography variant='h2'>Your Room Code is:</Typography>
           <Typography variant='h3'>{code}</Typography>
           <Typography variant='h4'>Waiting for players to join...</Typography>
-          <Button size='large' variant="contained" color="primary" onClick={() => {handleButtonClick}}>Start Game!</Button>
+          <Button size='large' variant="contained" color="primary" onClick={() => {handleButtonClick()}}>Start Game!</Button>
           <Typography sx={{fontWeight:'bold'}}>{user.length} Users have currently joined</Typography>
           <NameBox> 
             {user.map((fruit) => (

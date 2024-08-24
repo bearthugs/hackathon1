@@ -7,7 +7,8 @@ import { startGame } from '../function';
 import { LyricBox } from '../components/LyricBox';
 import { AnswerField } from '../components/AnswerField';
 import { Lyrics } from '../components/Lyric';
-import { socket } from '../socket';
+import { PeopleBox } from '../components/PeopleBox';
+import { useNavigate } from 'react-router-dom';
 
 export const Game = () => {
     let url = window.location.href;
@@ -15,7 +16,7 @@ export const Game = () => {
     const code = url[4];
     const [counter, setCounter] = React.useState(10);
     const [lyrics, setLyrics] = React.useState(/*first value*/)
-
+    const nav = useNavigate()
     // Third Attempts
     React.useEffect(() => {
       const timer =
@@ -30,7 +31,7 @@ export const Game = () => {
     //   };
 
     return (
-        <Box sx={{ display: 'flex', padding:'30px', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
             <PlayerBox>
                 <h1>Box 1</h1>
             </PlayerBox>
@@ -42,8 +43,22 @@ export const Game = () => {
                 <AnswerField></AnswerField>
             </Box>
             <PlayerBox>
-                <h1>Box 2</h1>
+                <PeopleBox>
+                    <b>player1</b>
+                    <br></br>
+                    <em>baybeh baybeh baybeh aw</em>
+                    <br></br>
+                    <Box>Score: 1</Box>
+                </PeopleBox>
+                <PeopleBox>
+                    <b>player2</b>
+                    <br></br>
+                    <em>baybeh baybeh baybeh aw</em>
+                    <br></br>
+                    <Box>Score: 1</Box>
+                </PeopleBox>
             </PlayerBox>
+            {/* <Button size='large' variant="contained" color="primary" onClick={() => {nav(`/final/${code}`)}}>Home</Button> */}
         </Box>
     )
 }
