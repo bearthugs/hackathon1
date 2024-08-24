@@ -11,6 +11,7 @@ class User:
         self.username = username
         self.top_songs = top_songs
         self.session_id = session_id #PK
+        self.room_id = None
         self.score = 0
     
     def get_username(self):
@@ -30,6 +31,9 @@ class User:
 
     def reset_score(self):
         self.score = 0
+
+    def set_room_id(self, room_id):
+        self.room_id = room_id
 
 class Room:
     def __init__(self, session, time, questions, players, difficulty):
@@ -108,6 +112,9 @@ def find_room(room_id, session_id):
         room_obj = online_rooms.get(room_id)
         if room_obj.add_user(session_id) == -1: # If there are already 8 people in the room
             return -1
+        else:
+            user = online_users[session_id]
+            user.set_room_id(room_id)
         return 1 # If the user has been successfully added to the room
     else:
         return 0 # The room does not exist
