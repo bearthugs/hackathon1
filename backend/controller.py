@@ -17,8 +17,8 @@ CORS(app)
 @app.route('/authentication', methods=['GET', 'POST'])
 def get_token():
     if request.method == 'POST': #button press
-        data = request.json
-        print(f"post request received {data}")
+        print("UHFISDIUFH")
+        return jsonify({"message": "YOOOOOO"})
 
 
 @app.route('/test', methods=['GET'])
