@@ -82,6 +82,20 @@ def connect():
     
     # emit("init_room_id", room_id)
 
+#testing lyrics getting
+
+# from decision_bot import init_pipeline, get_songs, pick_lyrics, pick_song
+# from scrapper import get_user_info
+#
+# pipe = init_pipeline()
+# name, songs = get_user_info()
+# songs_list = get_songs(pipe, songs)
+# song = pick_song(pipe, songs_list)
+# lyrics = pick_lyrics(pipe, song)
+# print(lyrics)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
