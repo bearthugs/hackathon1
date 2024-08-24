@@ -118,6 +118,22 @@ def handle_game_start(data):
     room_id = data
     room_obj = model.online_rooms[room_id]
     question = room_obj.get_question()
+
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_obj = model.online_rooms[room_id]
+    user_ids = room_obj.get_users
+
+    # print('\n\n\n')
+    # print(user_ids)
+    # print('\n\n\n')
+
+    # users = []
+    # for id in user_ids:
+    #     x = model.online_users[id]
+    #     print(x)
+
+
     emit('firstQuestion', {'question': question}) # giving game.jsx the first question
 
 @socketio.on('input')

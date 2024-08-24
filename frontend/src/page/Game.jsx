@@ -19,6 +19,16 @@ export const Game = () => {
     const [lyrics, setLyrics] = React.useState('');
     
    
+    React.useEffect(() => {
+
+        socket.emit('startGame', code);
+        socket.on('firstQuestion', async (question) => {
+
+            setLyrics(question.question)
+        })
+      }, []);
+
+
     const nav = useNavigate()
     // Third Attempts
     React.useEffect(() => {
@@ -28,20 +38,11 @@ export const Game = () => {
             setCounter(5)
             socket.emit('timeout', code) 
             socket.on('nextQuestion', async (question) => {
-                console.log('HI')
                 setLyrics(question.next)
             })
         }
       return () => clearInterval(timer);
     }, [counter]);
-
-    React.useEffect(() => {
-        socket.emit('startGame', code);
-        socket.on('firstQuestion', async (question) => {
-            // console.log
-            setLyrics(question.question)
-        })
-      }, []);
 
     // const handleButtonClick = () => {
     //     socket.emit('startGame', code);
