@@ -56,7 +56,7 @@ export const Game = () => {
                 <LyricBox>
                     <Lyrics lyric={lyrics}></Lyrics>
                 </LyricBox>
-                <AnswerField></AnswerField>
+                <AnswerField code={code}></AnswerField>
             </Box>
             <PlayerBox>
                 <PeopleBox>

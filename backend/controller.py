@@ -122,9 +122,15 @@ def handle_game_start(data):
 
 @socketio.on('input')
 def handle_input(data):
+
     room_id = data['room_id']
     session_id = data['session_id']
     answer = data['message']
+
+    
+    print(room_id)
+    print(session_id)
+    print(answer)
 
     rc = model.check_answer(room_id, session_id, answer)
 
@@ -149,6 +155,7 @@ def handle_input(data):
                                 'score': score})
     else: # the answer was wrong
         emit('wrongAnswer')
+
 
 @socketio.on('timeout')
 def handle_timeout(data):
