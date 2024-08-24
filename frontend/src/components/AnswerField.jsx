@@ -1,6 +1,8 @@
+import React from 'react';
 import { TextField } from '@mui/material';
 
 export const AnswerField = () => {
+    const [answer, setAnswer] = React.useState('');
     return (
       <TextField
         label="Your Answer"
@@ -24,6 +26,8 @@ export const AnswerField = () => {
             fontSize: '1.2rem', // Adjusts the label text size if necessary
           }
         }}
+        onChange={(e) => setAnswer(e.target.value)}
+        // onKeyPress={handleKeyPress}={}
       />
     );
 }

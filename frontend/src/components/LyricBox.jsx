@@ -6,6 +6,8 @@ export const LyricBox = styled(Box)(({ theme }) =>({
     rowGap: '20px',
     alignContent: 'space-between',
     border: '1px solid black',
-    height: '40vh',
-    width: '40vw'
+    height: '45vh',
+    width: '50vw',
+    padding: '15px',
+    textAlign: 'center'
 }))
