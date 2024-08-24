@@ -180,7 +180,8 @@ def get_winner(room_id):
             if user.get_score() > max_score:
                 winners.clear()
                 max_score = user.get_score()
-            winners.append(user)
+            winners.append(user.get_username())
+    return [winners, max_score]
 
 
 def get_authentication(session_id): #user object
