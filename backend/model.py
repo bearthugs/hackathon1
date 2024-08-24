@@ -107,7 +107,7 @@ class Room:
         formatted_ls = self.format_song_list(song_list)
         for song in formatted_ls:
             self.answers.append(song[0])
-            lyrics = pick_lyrics(song)
+            lyrics = pick_lyrics(song, self.get_difficulty)
             result.append(lyrics)
 
         self.questions = result #list of strings to display
