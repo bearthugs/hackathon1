@@ -76,7 +76,7 @@ def find_room():
                 "status": "failure",
                 "message": "/join"
             }
-            return make_response(jsonify(response), 400)
+            return make_response(jsonify(response), 404)
 
 @socketio.on('connect')
 def connect():
