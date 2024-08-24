@@ -131,9 +131,16 @@ def handle_game_start(data):
     room_id = user.get_room_id()
     room_obj = model.online_rooms[room_id]
     room_obj.set_questions(pipe)
+    user_ids = room_obj.get_users()
+
+    users = []
+    for id in user_ids:
+        x = model.online_users[id]
+        users.append(x.get_username())
+
     question = room_obj.get_question()
     
-    emit('firstQuestion', {'question': question}) # giving game.jsx the first question
+    emit('firstQuestion', {'question': question, 'users': users}, room=room_id, include_self=False) # giving game.jsx the first question
 
 @socketio.on('input')
 def handle_input(data):
@@ -157,6 +164,7 @@ def handle_input(data):
         no_question = room_obj.get_no_questions()
 
         if current + 1 == no_question:
+            # Add a point to the person who go the answer right
             winners = model.get_winner(room_id)
             emit('gameOver', {'winner', winners})
         else:
