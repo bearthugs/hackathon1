@@ -2,13 +2,14 @@ import model
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
-from decision_bot import init_pipeline
+from flask import Flask
+from flask_cors import CORS
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}})
 # pipe = init_pipeline()
-
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 connected_users = {}
 
 @app.route('/authentication', methods=['GET', 'POST'])
@@ -40,8 +41,6 @@ def create_code():
     data = request.json
     print(f"post request received {data}")
     return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
-    
-
 
 @app.route('/test', methods=['GET'])
 def text():
@@ -79,11 +78,19 @@ def find_room():
             return make_response(jsonify(response), 404)
 
 @socketio.on('connect')
-def connect():
-    session_id = request.cookies.get('session_id')
-    # room_id = user_id
-    
-    # emit("init_room_id", room_id)
+def handle_connect():
+    print(request.sid)
+    print('a user connected')
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('user disconnected')
+
+@socketio.on('test')
+def handle_test(data):
+    print("receiveddd")
+    print('received test event with data:', data)
+    emit('userjoin', {'text': 'yutfhhfhfhfh'})
 
 #testing lyrics getting
 
@@ -101,4 +108,4 @@ def connect():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, port=5000, debug=True)
