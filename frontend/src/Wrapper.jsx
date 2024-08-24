@@ -5,6 +5,7 @@ import { Create } from './page/Create'
 import { Room } from './page/Room';
 import { Setting } from './page/Setting'
 import { Join } from './page/Join'
+import { Game } from './page/Game'
 
 import { Route, Routes, useNavigate } from 'react-router-dom'
 
@@ -23,7 +24,7 @@ export function Wrapper () {
       <Route path="/setting" element={<Setting/>}></Route>
       <Route path="/join" element={<Join/>}></Route>
       <Route path="/room/:id" element={<Room/>}></Route>
-
+      <Route path="/game/:id" element={<Game/>}></Route>
     </Routes>
 
   );

@@ -17,3 +17,9 @@ export async function giveInfo(player, time, song, difficulty) {
     response = await axios.post('http://127.0.0.1:5000/create_room', { players: player, time: time, songs: song, difficulty: difficulty })
     return response
 }
+
+export async function startGame() {
+    let response;
+    response = await axios.get('http://127.0.0.1:5000/start')
+    return response
+}
