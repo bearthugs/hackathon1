@@ -9,12 +9,13 @@ export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
-    const [counter, setCounter] = React.useState(60);
+    const [counter, setCounter] = React.useState(10);
 
     // Third Attempts
     React.useEffect(() => {
       const timer =
         counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+        counter == 0 && setCounter(10)
       return () => clearInterval(timer);
     }, [counter]);
 
