@@ -2,9 +2,11 @@ import model
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
+from decision_bot import init_pipeline
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+pipe = init_pipeline()
 
 socketio = SocketIO(app)
 connected_users = {}
@@ -16,6 +18,7 @@ def get_token():
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
             rc, token = model.get_authentication()
+            response.set_cookie('session_id', token, path='/')
             if rc == 0:
                 response = {
                     "status": "success",

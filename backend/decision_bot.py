@@ -75,4 +75,3 @@ def pick_song(song_list):
 #
 # print(lyrics)
 
-
