@@ -109,10 +109,10 @@ class Room:
             result.append((artist, song))
         return result
 
-    def set_questions(self): #called when the game is ready to start
+    def set_questions(self, pipe): #called when the game is ready to start
         result = []
         union_ls = self.union_songs()
-        song_list = get_songs(union_ls)
+        song_list = get_songs(pipe, union_ls)
         formatted_ls = self.format_song_list(song_list)
         for song in formatted_ls:
             self.answers.append(song[0])
@@ -122,7 +122,8 @@ class Room:
         self.questions = result #list of strings to display
     
     def get_question(self) -> str:
-        return self.questions[self.current]
+        index = self.current
+        return self.questions[index]
 
     def inc_question(self):
         self.current += 1
