@@ -13,7 +13,7 @@ import { giveInfo } from '../function';
 export const Create = () => {
     const nav = useNavigate()
     const [height, setHeight] = React.useState(5);
-    const [time, setTime] = React.useState(15);
+    const [time, setTime] = React.useState(30);
     const [diff, setDiff] = React.useState('easy');
     const [song, setSong] = React.useState(5);
 

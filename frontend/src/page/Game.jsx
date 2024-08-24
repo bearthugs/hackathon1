@@ -11,6 +11,15 @@ export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
+    const [counter, setCounter] = React.useState(10);
+
+    // Third Attempts
+    React.useEffect(() => {
+      const timer =
+        counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+        counter == 0 && setCounter(10)
+      return () => clearInterval(timer);
+    }, [counter]);
 
     return (
         <Box sx={{ display: 'flex', padding:'30px', justifyContent: 'space-between' }}>
@@ -18,6 +27,7 @@ export const Game = () => {
                 <h1>Box 1</h1>
             </PlayerBox>
             <Box sx={{ display: 'flex', padding:'30px', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', rowGap: '50px' }}>
+                <div>Countdown: {counter}</div>
                 <LyricBox></LyricBox>
                 <AnswerField></AnswerField>
             </Box>
