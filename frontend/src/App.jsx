@@ -5,7 +5,8 @@ import { Toggle } from './components/Toggle';
 import { HeaderBox } from './components/HeaderBox';
 import { Theme } from './Theme';
 import { ThemeProvider, CssBaseline } from '@mui/material';
-
+import { Box, Button } from '@mui/material';
+import { ConditionalButton } from './components/ConditionalButton';
 
 function App () {
   const [darkMode, setDarkMode] = React.useState(false)
@@ -28,12 +29,15 @@ function App () {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <HeaderBox>
+    <BrowserRouter>
+    <HeaderBox>
             <h1>Spoti<em>FIGHT</em></h1>
             {/* <pre>{data}</pre> */}
-            <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange}/>
-        </HeaderBox>
-    <BrowserRouter>
+            <Box>
+              <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+              <ConditionalButton variant='contained'>Back</ConditionalButton>
+            </Box>
+      </HeaderBox>
     < Wrapper/>
     </BrowserRouter>
     </ThemeProvider>

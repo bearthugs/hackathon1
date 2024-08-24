@@ -15,22 +15,21 @@ export const Join = () => {
         const response = await checkRoomId(code)
         if (response.status === 200) {
             console.log(code)
-            // nav('/room/' + code)
+            nav(`/room/${code}`)
         } else {
-            console.log(response.status)
+            console.log(response.data)
         }
     }
 
     return (
-        <Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
             <FormBox theme={theme}>
                 <LabelInput>Room Code</LabelInput>
                 <InputBox name='code' placeholder={'Room Code'} value={code} onChange={(e) => setCode(e.target.value)} required>
                 </InputBox>
-                
             </FormBox>
 
-            <Button variant='contained' onClick={() => {
+            <Button sx={{ width: '40%'}} variant='contained' onClick={() => {
                     handleClick(nav, code)
                 }}>Start Game</Button>
         </Box>
