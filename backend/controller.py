@@ -9,4 +9,8 @@ app.config['SERVER_SOFTWARE'] = False
 @app.route('/home')
 def get_index():
     session_id = flask.request.cookies.get('session_id')
-    
+
+@app.route('/authentication')
+def get_token(message):
+    print(f"post request received {message}")
+
