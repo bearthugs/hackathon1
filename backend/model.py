@@ -1,3 +1,5 @@
+import scrapper
+
 class User:
     def __init__(self, username, token, top_songs, session_id):
         self.username = username
@@ -23,12 +25,8 @@ class Room:
     
 
 
-def index(session_id):
-    '''
-        index
-        Returns the view for the index
-    '''
-    if session_id != None:
-        username = user_details(session_id)
-        return page_view("index", "loggedin_header", name=username)
-    return page_view("index")
+def get_authentication(): #user object
+    access_token = scrapper.get_spotify_token()
+    tracks = scrapper.get_top_artists(access_token)["items"]
+    artist_names = [artist["name"] for artist in tracks]
+    # user = new User()

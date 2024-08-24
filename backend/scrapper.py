@@ -58,12 +58,12 @@ def get_top_artists(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-def main():
-    access_token = get_spotify_token()
-    print(access_token)
-    tracks = get_top_artists(access_token)["items"]
-    artist_names = [artist["name"] for artist in tracks]
-    print(artist_names)
+# def main():
+#     access_token = get_spotify_token()
+#     print(access_token)
+#     tracks = get_top_artists(access_token)["items"]
+#     artist_names = [artist["name"] for artist in tracks]
+#     print(artist_names)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
