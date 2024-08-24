@@ -119,7 +119,6 @@ def handle_game_start(data):
     room_obj = model.online_rooms[room_id]
     room_obj.set_questions()
     question = room_obj.get_question()
-    
     emit('firstQuestion', {'question': question}) # giving game.jsx the first question
 
 @socketio.on('input')
@@ -165,7 +164,7 @@ def handle_timeout(data):
             winners = model.get_winner(room_id)
             emit('gameOver', {'winner', winners})
     else:
-        emit('nextQuestion', {'next': question,
+        emit('nextQuestion', {'next': 'LYRIC CLAIRE',
                             'username': None,
                             'score': 0})
 
