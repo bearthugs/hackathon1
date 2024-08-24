@@ -1,8 +1,11 @@
 import base64
 import webbrowser
 from urllib.parse import urlencode, urlparse, parse_qs
-import requests
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import requests
+import re
+from bs4 import BeautifulSoup
+from lyricsgenius import Genius
 
 class SpotifyAuthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -29,11 +32,8 @@ def get_spotify_token() -> str:
     server_address = ('', 7777)
     httpd = HTTPServer(server_address, SpotifyAuthHandler)
     httpd.handle_request()
-    
-    try:
-        auth_code = httpd.auth_code
-    except:
-        return
+
+    auth_code = httpd.auth_code
 
     encoded_credentials = base64.b64encode(client_id.encode() + b':' + client_secret.encode()).decode("utf-8")
 
@@ -52,7 +52,7 @@ def get_spotify_token() -> str:
 
     return r.json()['access_token']
 
-def get_top_tracks(access_token):
+def get_top_tracks(access_token: str) -> dict:
     url = "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50"
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -61,7 +61,7 @@ def get_top_tracks(access_token):
     response = requests.get(url, headers=headers)
     return response.json()
 
-def get_prof_name(access_token):
+def get_prof_name(access_token: str) -> str:
     url = "https://api.spotify.com/v1/me"
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -71,7 +71,7 @@ def get_prof_name(access_token):
     return response.json()['display_name']
 
 
-def get_user_info():
+def get_user_info() -> tuple[str, list, str]:
     top_tracks_names = []
     access_token = get_spotify_token()
     profile_name = get_prof_name(access_token)
@@ -80,3 +80,70 @@ def get_user_info():
     for artist, track in artist_track_tuples:
         top_tracks_names.append((artist, track))
     return profile_name, top_tracks_names, access_token
+
+def format_artist(name: str) -> str:
+    name = re.sub(r'[^a-z0-9 ]', '', name.lower()).strip()
+
+    return name
+
+def get_azlyrics_url(artist_name: str, song_title: str) -> str:
+    artist_name = format_artist(artist_name)
+    song_title = song_title.replace(" ", "").lower().strip()
+    artist_name = artist_name.replace(" ", "").lower()
+    url = f"https://www.azlyrics.com/lyrics/{artist_name}/{song_title}.html"
+    return url
+
+def get_genius_lyrics(artist_name: str, song_title: str) -> Genius:
+    genius = Genius("5rJ8VNSRjcdslxEmrwtLwIqIYSwi5aHagreHHC43tPyOHP4vUgWeAuTpr1SHTiVe")
+    song = genius.search_song(song_title, artist_name)
+    return song
+
+# def get_musixmatch_url(artist_name, song_title):
+#     artist_name = artist_name.replace(" ", "-").lower()
+#     song_title = song_title.replace(" ", "-").lower()
+#     url = f"https://www.musixmatch.com/lyrics/{artist_name}/{song_title}"
+#     return url
+
+def get_lyrics_from_url(url: str) -> str:
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    lyrics_div = soup.find('div', class_=None, id=None)
+    if lyrics_div is None:
+        return None
+    lyrics = lyrics_div.get_text(separator='\n')
+    return lyrics.strip()
+
+def get_lyrics(artist_name: str, song_title: str) -> str | None:
+    sources = [
+        get_azlyrics_url,
+    ]
+
+    song = get_genius_lyrics(artist_name, song_title)
+    if song:
+        return song.lyrics
+
+    for source in sources:
+        url = source(artist_name, song_title)
+
+        lyrics = get_lyrics_from_url(url)
+        if lyrics:
+            return lyrics
+
+    print("Could not find the lyrics on any of the sources.")
+    return None
+
+def format_lyrics(string: str) -> list[str] | None:
+    lines = list(filter(None, string.splitlines()))
+
+    return lines
+
+
+
+
+
+# Example usage
+# artist_name = "(G)-Idle"
+# song_title = "FATE"
+# lyrics = get_lyrics(artist_name, song_title)
+# lyrics = format_lyrics(lyrics)
+# print(lyrics)

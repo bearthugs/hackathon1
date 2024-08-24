@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material';
 import Slider from '@mui/material/Slider';
 import { MySelect } from '../components/SettingForm';
 import MenuItem from '@mui/material/MenuItem';
+import { giveInfo } from '../function';
 
 
 export const Create = () => {
@@ -14,6 +15,13 @@ export const Create = () => {
     const [height, setHeight] = React.useState(5);
     const [time, setTime] = React.useState(15);
     const [diff, setDiff] = React.useState('easy');
+    const [song, setSong] = React.useState(5);
+
+    const change = async (height, time, song, diff) => {
+        const response = await giveInfo(height, time, song, diff)
+        console.log(response)
+        nav(`/room/${response.data}`)
+      }
 
     const handleChange = (event) => {
         setDiff(event.target.value);
@@ -51,7 +59,7 @@ export const Create = () => {
         valueLabelDisplay="on"
       />
         {/* <InputBox name = 'password' placeholder={'Password'} type='password'onChange={(e) => setPassword(e.target.value)} onKeyUp={(e) => handleKeyPress(e, email, password, nav)}/> */}
-        <InputBox name = 'song' placeholder={'Number of Songs'}/>
+        <InputBox name = 'song' placeholder={'Number of Songs'} onChange={(e) => setSong(e.target.value)}/>
           <MySelect
             labelId="fontFamily"
             id="fontFamily"
@@ -64,9 +72,9 @@ export const Create = () => {
               <MenuItem value={'medium'}>Medium</MenuItem>
               <MenuItem value={'hard'}>Hard</MenuItem>
             </MySelect>
-        <MyButton theme={theme}
+        <MyButton theme={theme} variant='outlined'
         onClick={() => {
-          console.log('hoi')
+          change(height, time, song, diff)
         }}>Create</MyButton>
       </FormBox>
 

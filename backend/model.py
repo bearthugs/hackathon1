@@ -1,6 +1,7 @@
 import scrapper
 import string
 import random
+from decision_bot import get_songs, pick_song, pick_lyrics
 
 online_users = dict()
 online_rooms = dict()
@@ -40,6 +41,7 @@ class Room:
         self.time = time
         self.questions = questions
         self.players = players
+        
 
     def get_id(self):
         return self.id
@@ -77,8 +79,23 @@ class Room:
     def get_questions(self):
         return self.questions
     
-    def set_questions(self, questions):
-        self.questions = questions
+    def union_songs(self):
+        result = []
+        for user in self.users:
+            obj = online_users[user]
+            result += obj.get_top_songs()
+        return result
+    
+    def set_questions(self):
+        result = []
+        union_ls = self.union_songs()
+        song_list = get_songs(union_ls)
+        for song in song_list:
+            lyrics = pick_lyrics(song)
+            result.append(lyrics)
+
+        self.questions = result #list of strings to display
+    
 
 def create_room(session, players, time, difficulty, songs):
     room = Room(session, time, songs, players, difficulty)
