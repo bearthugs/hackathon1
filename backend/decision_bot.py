@@ -36,9 +36,8 @@ def get_songs(pipe: Pipeline, track_list: list) -> str:
             break
     return assistant_output
 
-def pick_lyrics(pipe: Pipeline, song: str) -> str:
-    chosen_song = [part.replace('(', '').replace("'", '').replace(')', '') for part in song.split(', ')]
-    lyrics = get_lyrics(chosen_song[0], chosen_song[1])
+def pick_lyrics(pipe: Pipeline, song: tuple) -> str:
+    lyrics = get_lyrics(song[0], song[1])
     lyrics = format_lyrics(lyrics)
     messages = [
         {"role": "user", "content": f"Can you pick out a random line from the lyrics of the song without any extra symbols, and without any preamble: {lyrics}"},
