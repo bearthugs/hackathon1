@@ -1,6 +1,7 @@
 import scrapper
 import string
 import random
+from decision_bot import init_pipeline, get_songs, pick_song, pick_lyrics
 
 online_users = dict()
 online_rooms = dict()
@@ -33,7 +34,7 @@ class User:
 class Room:
     def __init__(self, session, time, questions, players, difficulty):
         characters = string.ascii_letters + string.digits
-        self.id = ''.join(random.choices(characters, k=6))
+        self.id = (''.join(random.choices(characters, k=6))).upper()
         self.users = [session]
         self.owner = self.users[0]
         self.difficulty = difficulty #check data type and stuff
@@ -77,14 +78,36 @@ class Room:
     def get_questions(self):
         return self.questions
     
-    def set_questions(self, questions):
-        self.questions = questions
+    def union_songs(self):
+        result = []
+        for user in self.users:
+            obj = online_users[user]
+            result += obj.get_top_songs()
+        return result
+    
+    def set_questions(self):
+        pipe = init_pipeline()
+        union_ls = self.union_songs()
+        song_list = get_songs(union_ls)
+
+
+        # self.questions = questions
+    
 
 def create_room(session, players, time, difficulty, songs):
     room = Room(session, time, songs, players, difficulty)
     id = room.get_id()
     online_rooms[id] = room
     return id
+
+def find_room(room_id, session_id):
+    if room_id in online_rooms:
+        room_obj = online_rooms.get(room_id)
+        if room_obj.add_user(session_id) == -1: # If there are already 8 people in the room
+            return -1
+        return 1 # If the user has been successfully added to the room
+    else:
+        return 0 # The room does not exist
 
 
 def get_authentication(): #user object
@@ -93,6 +116,6 @@ def get_authentication(): #user object
         return -1
     user = User(username, tracks, session_id)
     online_users[session_id] = user #save user into dictionary by session id
-    return 0
+    return 0, session_id
     
     
