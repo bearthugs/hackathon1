@@ -118,6 +118,8 @@ def handle_user_join():
     session_id = request.sid
     user = model.online_users[session_id]
     room_id = user.get_room_id()
+    room_obj = model.online_rooms
+    room_obj.add_user(session_id)
     print(session_id)
     user_obj = model.online_users[session_id]
     username = user_obj.get_name()
@@ -166,15 +168,13 @@ def handle_input(data):
         no_question = room_obj.get_no_questions()
 
         if current + 1 == no_question:
-            # Add a point to the person who go the answer right
-            winners = model.get_winner(room_id)
-            emit('gameOver', {'winner', winners})
+            emit('gameOver')
         else:
             emit('nextQuestion', {'next': question,
                                 'username': username,
                                 'score': score}, room=room_id, include_self=False)
     else: # the answer was wrong
-        emit('wrongAnswer', room=room_id, include_self=False)
+        emit('wrongAnswer', room=room_id)
 
 @socketio.on('timeout')
 def handle_timeout(data):
@@ -188,12 +188,19 @@ def handle_timeout(data):
     no_question = room_obj.get_no_questions()
     # Need to check if this is the last question
     if current + 1 == no_question:
-            winners = model.get_winner(room_id)
-            emit('gameOver', {'winner', winners}, room=room_id, include_self=False)
+            emit('gameOver')
     else:
         emit('nextQuestion', {'next': 'LYRIC CLAIRE',
                             'username': None,
-                            'score': 0}, room=room_id, include_self=False)
+                            'score': 0}, room=room_id)
+
+@socketio.on('winner')
+def handle_winner(data):
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
+    winners_array = model.get_winner(room_id)
+    emit('displayWin', {'winner', winners_array}, room=room_id)
 
 @socketio.on('endGame')
 def handle_endGame(data):
