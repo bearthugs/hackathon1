@@ -71,7 +71,7 @@ def get_prof_name(access_token: str) -> str:
     return response.json()['display_name']
 
 
-def get_user_info() -> tuple[str, list]:
+def get_user_info() -> tuple[str, list, str]:
     top_tracks_names = []
     access_token = get_spotify_token()
     profile_name = get_prof_name(access_token)
@@ -79,7 +79,7 @@ def get_user_info() -> tuple[str, list]:
     artist_track_tuples = [(artist['name'], track['name']) for track in tracks for artist in track['artists']]
     for artist, track in artist_track_tuples:
         top_tracks_names.append((artist, track))
-    return profile_name, top_tracks_names
+    return profile_name, top_tracks_names, access_token
 
 def format_artist(name: str) -> str:
     name = re.sub(r'[^a-z0-9 ]', '', name.lower()).strip()
