@@ -112,14 +112,17 @@ class Room:
 
         self.questions = result #list of strings to display
     
-    def get_question(self, num) -> str:
-        return self.questions[num-1]
+    def get_question(self) -> str:
+        return self.questions[self.current]
 
     def inc_question(self):
         self.current += 1
+
+    def get_current(self):
+        return self.current
     
     def get_answer(self):
-        return self.answers[self.current-1]
+        return self.answers[self.current]
 
 '''
 we get the session_id (user),
@@ -155,8 +158,24 @@ def check_answer(room_id, session_id, user_answer):
         return 1
     return 0
 
-def get_authentication(): #user object
-    username, tracks, session_id = scrapper.get_user_info()
+def get_winner(room_id):
+    room_obj = online_rooms.get(room_id)
+    user_ids = room_obj.get_users()
+    user_obj_ls = []
+    for session_id in user_ids:
+        user_obj_ls.append(online_users[session_id])
+    winners = []
+    max_score = 0
+    for user in user_obj_ls:
+        if user.get_score() >= max_score:
+            if user.get_score() > max_score:
+                winners.clear()
+                max_score = user.get_score()
+            winners.append(user)
+
+
+def get_authentication(session_id): #user object
+    username, tracks= scrapper.get_user_info()
     if session_id == False:
         return -1
     user = User(username, tracks, session_id)
