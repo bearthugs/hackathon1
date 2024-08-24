@@ -153,6 +153,11 @@ def handle_input(data):
     room_id = user.get_room_id()
     answer = data['message']
 
+    
+    print(room_id)
+    print(session_id)
+    print(answer)
+
     rc = model.check_answer(room_id, session_id, answer)
 
     if rc == 1: # the correct answer was given
@@ -175,6 +180,7 @@ def handle_input(data):
                                 'score': score}, room=room_id, include_self=False)
     else: # the answer was wrong
         emit('wrongAnswer', room=room_id)
+
 
 @socketio.on('timeout')
 def handle_timeout(data):
