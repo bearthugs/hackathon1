@@ -8,15 +8,18 @@ export const Room = () => {
   let url = window.location.href;
   url = url.split('/');
   const code = url[4]
-  // socket.on('connect', true);
-  // React.useEffect(() =>{
-  //   socket.on('userjoin', async (name) => {
-  //     console.log(name)
-  //   })
-  //   return () => {
-  //     socket.off('userjoin')
-  //   };
-  // }, [])
+
+  socket.on('connect', true);
+  React.useEffect(() =>{
+    socket.on('userjoin', async (name) => {
+      console.log(name)
+    })
+    return () => {
+      socket.off('userjoin')
+    };
+  }, [])
+
+  
     return (
         <Box>
           <Heading theme='3em'>Your Room Code is:</Heading>
