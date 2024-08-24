@@ -91,6 +91,7 @@ def handle_connect():
     print(session_id)
     print('a user connected')
 
+
 @socketio.on('disconnect')
 def handle_disconnect():
     print('user disconnected')
