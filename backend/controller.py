@@ -1,11 +1,9 @@
 import model
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-# import database
 
 app = Flask(__name__)
 CORS(app)
-# database.db_init()
 
 # socketio = flask.SocketIO(app)
 
@@ -19,6 +17,19 @@ def get_token():
     if request.method == 'POST': #button press
         data = request.json
         print(f"post request received {data}")
+        if data['message'] == 'get authentication':
+            rc = model.get_authentication()
+            if rc == 0:
+                response = {
+                    "status": "success",
+                    "message": "/home"
+                }
+            else:
+                response = {
+                    "status": "failed",
+                    "message": "/authentication"
+                }
+            return jsonify(response)
 
 
 @app.route('/test', methods=['GET'])

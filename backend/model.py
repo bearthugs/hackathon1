@@ -1,34 +1,86 @@
+import scrapper
+
+online_users = dict()
+
 class User:
-    def __init__(self, username, token, top_songs, session_id):
+    def __init__(self, username, top_songs, session_id):
         self.username = username
-        self.token = token
         self.top_songs = top_songs
         self.session_id = session_id #PK
         self.score = 0
     
+    def get_username(self):
+        return self.username
+    
+    def get_top_songs(self):
+        return self.top_songs
+    
+    def get_session_id(self):
+        return self.session_id
+
     def get_score(self):
         return self.score
     
     def increment_score(self):
         self.score += 1
 
+    def reset_score(self):
+        self.score = 0
+
 class Room:
-    def __init__(self, id, time, questions, players, difficulty):
+    def __init__(self, id, user, time, questions, players, difficulty):
         self.id = id
-        self.users = []
+        self.users = [user]
+        self.owner = self.users[0]
         self.difficulty = difficulty #0 easy, 1 medium, 2 hard
         self.time = time
         self.questions = questions
         self.players = players
+
+    def get_id(self):
+        return self.id
+
+    def get_users(self):
+        return self.users
+    
+    def add_user(self, user):
+        self.users.append(user)
+        self.players += 1
+
+    def rmv_user(self, session_id):
+        for user in self.users:
+            if user.get_session_id == session_id:
+                self.users.remove(user)
+            break
+        self.players -= 1
+
+    def get_owner(self):
+        return self.owner
+
+    def get_difficulty(self):
+        return self.difficulty
+    
+    def get_time(self):
+        return self.time
+    
+    def set_time(self, time):
+        self.time = time
+    
+    def get_questions(self):
+        return self.questions
+    
+    def set_questions(self, questions):
+        self.questions = questions
+
     
 
 
-def index(session_id):
-    '''
-        index
-        Returns the view for the index
-    '''
-    if session_id != None:
-        username = user_details(session_id)
-        return page_view("index", "loggedin_header", name=username)
-    return page_view("index")
+def get_authentication(): #user object
+    username, tracks, session_id = scrapper.get_user_info()
+    if session_id == False:
+        return -1
+    user = User(username, tracks, session_id)
+    online_users[session_id] = user #save user into dictionary by session id
+    return 0
+    
+    
