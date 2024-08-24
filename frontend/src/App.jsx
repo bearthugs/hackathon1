@@ -9,6 +9,9 @@ import { Box, Button } from '@mui/material';
 import { ConditionalButton } from './components/ConditionalButton';
 import { socket } from './socket'; // Import the socket instance
 import SportsMmaIcon from '@mui/icons-material/SportsMma';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import IconButton from '@mui/material/IconButton';
 
 function App() {
     const [darkMode, setDarkMode] = useState(false);
@@ -18,7 +21,15 @@ function App() {
     };
 
     const theme = Theme(darkMode ? 'dark' : 'light');
-
+    
+    const colorMode = React.useMemo(
+      () => ({
+        toggleColorMode: () => {
+          setDarkMode((prevMode) => (prevMode === false ? true : false));
+        },
+      }),
+      [],
+    );
   // useEffect(() => {
   //   fetch('http://127.0.0.1:5000/test')
   //     .then(response => response.json())
@@ -31,14 +42,18 @@ function App() {
       <CssBaseline/>
     <BrowserRouter>
     <HeaderBox>
-          <Box>
-            <h1>Spoti<em>FIGHT</em></h1>
-            {/* <SportsMmaIcon/> */}
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', columnGap: '10px' }}>
+          <SportsMmaIcon sx={{ width: '40px', height:'40px'}}/>
+            <h1 style={{ display: 'inline'}}>Spoti<em>FIGHT</em></h1>
+            
           </Box>
             
             {/* <pre>{data}</pre> */}
             <Box>
-              <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+              {/* <Toggle darkMode={darkMode} handleThemeChange={handleThemeChange}/> */}
+              <IconButton sx={{ ml: 2, height:'25px', width: '25px' }} onClick={colorMode.toggleColorMode} color="inherit">
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
               <ConditionalButton variant='contained'>Back</ConditionalButton>
             </Box>
       </HeaderBox>
