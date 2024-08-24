@@ -45,10 +45,14 @@ class Room:
         return self.users
     
     def add_user(self, user):
+        if len(self.users) == 8:
+            return -1
         self.users.append(user)
         self.players += 1
 
     def rmv_user(self, session_id):
+        if len(self.users == 1):
+            return -1
         for user in self.users:
             if user.get_session_id == session_id:
                 self.users.remove(user)
