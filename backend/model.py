@@ -1,4 +1,6 @@
 import scrapper
+import string
+import random
 
 online_users = dict()
 
@@ -28,9 +30,10 @@ class User:
         self.score = 0
 
 class Room:
-    def __init__(self, id, user, time, questions, players, difficulty):
-        self.id = id
-        self.users = [user]
+    def __init__(self, session, time, questions, players, difficulty):
+        characters = string.ascii_letters + string.digits
+        self.id = ''.join(random.choices(characters, k=6))
+        self.users = [session]
         self.owner = self.users[0]
         self.difficulty = difficulty #0 easy, 1 medium, 2 hard
         self.time = time
@@ -43,13 +46,17 @@ class Room:
     def get_users(self):
         return self.users
     
-    def add_user(self, user):
-        self.users.append(user)
+    def add_user(self, session):
+        if len(self.users) == 8:
+            return -1
+        self.users.append(session)
         self.players += 1
 
     def rmv_user(self, session_id):
+        if len(self.users == 1):
+            return -1
         for user in self.users:
-            if user.get_session_id == session_id:
+            if user == session_id:
                 self.users.remove(user)
             break
         self.players -= 1
