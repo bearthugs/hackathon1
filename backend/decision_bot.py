@@ -63,7 +63,7 @@ def pick_song(pipe: Pipeline, song_list: str) -> str:
             break
     return assistant_output
 
-pipe = init_pipeline()
+# pipe = init_pipeline()
 
 #example usage
 

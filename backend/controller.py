@@ -1,12 +1,12 @@
 import model
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
 from decision_bot import init_pipeline
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
-pipe = init_pipeline()
+# pipe = init_pipeline()
 
 socketio = SocketIO(app)
 connected_users = {}
@@ -18,24 +18,25 @@ def get_token():
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
             rc, token = model.get_authentication()
-            response.set_cookie('session_id', token, path='/')
             if rc == 0:
-                response = {
+                dict = {
                     "status": "success",
                     "message": "/home",
                     "token": token
                 }
+                response = make_response(jsonify(dict))
+                response.set_cookie('session_id', token, path='/')
+
             else:
                 response = {
                     "status": "failed",
                     "message": "/authentication"
                 }
-            return jsonify(response)
+            return response
 
 @app.route('/create_room', methods=['POST'])
 def create_code():
     session_id = request.cookies.get('session_id')
-    print(session_id)
     data = request.json
     print(f"post request received {data}")
     return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
