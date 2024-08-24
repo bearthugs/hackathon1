@@ -143,7 +143,7 @@ def handle_game_start(data):
 
     # question = room_obj.get_question()
     question = ['lyric1', 'lyric2', 'lyric3', 'lyric4']
-    
+    print(users, '🤬')
     emit('firstQuestion', {'question': question, 'users': users}, room=room_id, include_self=False) # giving game.jsx the first question
 
 @socketio.on('input')

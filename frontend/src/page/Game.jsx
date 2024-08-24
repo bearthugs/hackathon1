@@ -17,28 +17,16 @@ export const Game = () => {
     const [counter, setCounter] = React.useState(5);
     const [lyrics, setLyrics] = React.useState('');
     const [users, setUsers] = React.useState([])
-   
+    const [isRenderedOnce, setIsRenderedOnce] = React.useState(false);
     const nav = useNavigate()
-    // Third Attempts
-    React.useEffect(() => {
-      const timer =
-        counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-        if (counter == 0) {
-            setCounter(5)
-            socket.emit('timeout', code) 
-            socket.on('nextQuestion', async (question) => {
-                console.log('HI')
-                setLyrics(question.next)
-            })
-        }
-      return () => clearInterval(timer);
-    }, [counter]);
 
     React.useEffect(() => {
         socket.emit('startGame', code);
         socket.on('firstQuestion', async (question) => {
             console.log('HI')
+            console.log(question)
             setLyrics(question.question)
+            console.log(question.users)
             let userNew = []
             for (const user in question.users) {
                 userNew.push({name: user, score: 0, answer: ''})
@@ -46,7 +34,23 @@ export const Game = () => {
             setUsers(userNew)
             console.log(userNew)
         })
-      }, []);
+    });
+
+    // Third Attempts
+    React.useEffect(() => {
+        const timer =
+        counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+            if (counter == 0) {
+                setCounter(5)
+                socket.emit('timeout', code) 
+                socket.on('nextQuestion', async (question) => {
+                    setLyrics(question.next)
+                })
+            }
+        return () => clearInterval(timer);
+    }, [counter]);
+
+    
 
     // const handleButtonClick = () => {
     //     socket.emit('startGame', code);
@@ -56,6 +60,11 @@ export const Game = () => {
     return (
         <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
             <PlayerBox>
+                {
+                    users.map((user) => (
+                        <PersonCard name={user.name} score={user.score}></PersonCard>
+                    ))
+                }
             </PlayerBox>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', rowGap: '50px' }}>
                 <div>Countdown: {counter}</div>
@@ -65,11 +74,6 @@ export const Game = () => {
                 <AnswerField></AnswerField>
             </Box>
             <PlayerBox>
-                {
-                    users.map((user) => (
-                        <PersonCard name={user.name} score={user.score}></PersonCard>
-                    ))
-                }
                 <PersonCard></PersonCard>
                 <PeopleBox>
                     <b>player1</b>
