@@ -14,17 +14,21 @@ CORS(app)
 
 @app.route('/authentication', methods=['GET', 'POST'])
 def get_token():
-    session = request.cookies.get('session_id')
     if request.method == 'POST': #button press
         data = request.json
         print(f"post request received {data}")
         if data['message'] == 'get authentication':
-            response = model.get_authentication(session)
-            response = {
-                "status": "success",
-                "token": "dummy_token_123",
-                "message": "Authentication successful"
-            }
+            rc = model.get_authentication()
+            if rc == 0:
+                response = {
+                    "status": "success",
+                    "message": "/home"
+                }
+            else:
+                response = {
+                    "status": "failed",
+                    "message": "/authentication"
+                }
             return jsonify(response)
 
 

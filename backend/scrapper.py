@@ -29,8 +29,11 @@ def get_spotify_token() -> str:
     server_address = ('', 7777)
     httpd = HTTPServer(server_address, SpotifyAuthHandler)
     httpd.handle_request()
-
-    auth_code = httpd.auth_code
+    
+    try:
+        auth_code = httpd.auth_code
+    except:
+        return
 
     encoded_credentials = base64.b64encode(client_id.encode() + b':' + client_secret.encode()).decode("utf-8")
 
@@ -76,4 +79,4 @@ def get_user_info():
     artist_track_tuples = [(artist['name'], track['name']) for track in tracks for artist in track['artists']]
     for artist, track in artist_track_tuples:
         top_tracks_names.append((artist, track))
-    return profile_name, top_tracks_names
+    return profile_name, top_tracks_names, access_token
