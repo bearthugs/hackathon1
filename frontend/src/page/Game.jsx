@@ -9,14 +9,14 @@ import { AnswerField } from '../components/AnswerField';
 import { Lyrics } from '../components/Lyric';
 import { PeopleBox } from '../components/PeopleBox';
 import { useNavigate } from 'react-router-dom';
-
+import { PersonCard } from '../components/PersonCard';
 export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
     const [counter, setCounter] = React.useState(5);
     const [lyrics, setLyrics] = React.useState('');
-    
+    const [users, setUsers] = React.useState([])
    
     const nav = useNavigate()
     // Third Attempts
@@ -37,8 +37,14 @@ export const Game = () => {
     React.useEffect(() => {
         socket.emit('startGame', code);
         socket.on('firstQuestion', async (question) => {
-            // console.log
+            console.log('HI')
             setLyrics(question.question)
+            let userNew = []
+            for (const user in question.users) {
+                userNew.push({name: user, score: 0, answer: ''})
+            }
+            setUsers(userNew)
+            console.log(userNew)
         })
       }, []);
 
@@ -59,6 +65,12 @@ export const Game = () => {
                 <AnswerField></AnswerField>
             </Box>
             <PlayerBox>
+                {
+                    users.map((user) => (
+                        <PersonCard name={user.name} score={user.score}></PersonCard>
+                    ))
+                }
+                <PersonCard></PersonCard>
                 <PeopleBox>
                     <b>player1</b>
                     <br></br>
