@@ -10,10 +10,6 @@ export const Join = () => {
     const theme = useTheme()
     const [code, setCode] = React.useState('');
 
-    const handleInputChange = (e) => {
-        setCode(e.target.value);
-    };
-
     const handleClick = async (nav, code) => {
         console.log(code)
         const response = await checkRoomId(code)
@@ -29,14 +25,14 @@ export const Join = () => {
         <Box>
             <FormBox theme={theme}>
                 <LabelInput>Room Code</LabelInput>
-                <InputBox name='code' placeholder={'Room Code'} value={code} onChange={handleInputChange} required>
+                <InputBox name='code' placeholder={'Room Code'} value={code} onChange={(e) => setCode(e.target.value)} required>
                 </InputBox>
-                <Button variant='contained' onClick={() => {
-                    handleClick(code)
-                }} type="submit">Start Game</Button>
+                
             </FormBox>
 
-            
+            <Button variant='contained' onClick={() => {
+                    handleClick(nav, code)
+                }}>Start Game</Button>
         </Box>
     )
 }   
