@@ -17,6 +17,7 @@ export const Room = () => {
     React.useEffect(() => {
         socket.connect();
         console.log("connecting");
+        socket.emit('join_room');
 
         socket.on('connect', () => {
             console.log('Socket connected');
