@@ -70,7 +70,7 @@ export const Create = () => {
         }}>Create</MyButton>
       </FormBox>
 
-        </Box>
+      </Box>
     )
 }
 
