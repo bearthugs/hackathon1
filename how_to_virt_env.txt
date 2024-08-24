@@ -1,7 +1,7 @@
 1. In your terminal, type in:
     python -m venv virtual_env
         OR  
-    python3 -m venve virtual_env
+    python3 -m venv virtual_env
 Try python first. If it doesn't work, use python3.
 DO NOT run both.
 
@@ -14,3 +14,6 @@ environment you just created
     pip install Flask
 Obviously, this installs Flask.
 Okay, you're good to go, good luck
+
+
+flask --app backend/controller.py run --port=5050
