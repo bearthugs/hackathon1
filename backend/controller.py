@@ -36,7 +36,7 @@ def create_code():
     session_id = request.cookies.get('session_id')
     data = request.json
     print(f"post request received {data}")
-    model.create_room(data['players'], data['time'], data['difficulty'], data['songs'])
+    return model.create_room(session_id, data['players'], data['time'], data['difficulty'], data['songs'])
     
 
 
