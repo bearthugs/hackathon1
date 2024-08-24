@@ -7,20 +7,27 @@ import { startGame } from '../function';
 import { LyricBox } from '../components/LyricBox';
 import { AnswerField } from '../components/AnswerField';
 import { Lyrics } from '../components/Lyric';
+import { socket } from '../socket';
 
 export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
     const [counter, setCounter] = React.useState(10);
+    const [lyrics, setLyrics] = React.useState(/*first value*/)
 
     // Third Attempts
     React.useEffect(() => {
       const timer =
         counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-        counter == 0 && setCounter(10)
+        counter == 0 && setCounter(10) && socket.emit('timeout')
       return () => clearInterval(timer);
     }, [counter]);
+
+    // const handleButtonClick = () => {
+    //     socket.emit('startGame', code);
+    //     handleStartGame(nav)
+    //   };
 
     return (
         <Box sx={{ display: 'flex', padding:'30px', justifyContent: 'space-between', alignItems: 'center' }}>
