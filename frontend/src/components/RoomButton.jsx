@@ -9,7 +9,7 @@ export const RoomButton = (props) => {
     const nav = useNavigate()
     // const theme = useTheme()
     return (
-        <Button startIcon={isCreate?<CreateIcon sx={{ width: '100px', height: '100px' }}/>:<PeopleIcon sx={{ width: '100px', height: '100px' }}/>} variant="outlined" sx={{ width: '70%', height: '250px', fontSize:'4em', borderWidth: '5px'}} onClick={() => nav(location)}>
+        <Button startIcon={isCreate?<CreateIcon sx={{ width: '100px', height: '100px', margin: '5px' }}/>:<PeopleIcon sx={{ width: '100px', height: '100px', margin: '10px' }}/>} variant="outlined" sx={{ width: '70%', height: '250px', fontSize:'4em', borderWidth: '5px'}} onClick={() => nav(location)}>
             {display}
         </Button>
     )
