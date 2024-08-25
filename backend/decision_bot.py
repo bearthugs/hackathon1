@@ -6,7 +6,7 @@ from huggingface_hub import login
 
 def init_pipeline() -> Pipeline:
 
-    login("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")
+    login("loginhere")
 
     mps_device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
