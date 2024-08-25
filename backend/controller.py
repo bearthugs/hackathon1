@@ -4,15 +4,18 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, join_room, emit, leave_room
 from flask import Flask
 from flask_cors import CORS
+from decision_bot import init_pipeline
 
 from flask_socketio import SocketIO
 #from decision_bot import init_pipeline
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}}, allow_credentials=True)
-#pipe = init_pipeline()
+
 socketio = SocketIO(app, cors_allowed_origins="*", allow_credentials=True)
 connected_users = {}
+
+#pipe = init_pipeline()
 
 @app.route('/authentication', methods=['GET', 'POST'])
 def get_token():
@@ -168,6 +171,7 @@ def handle_input(data):
         if current + 1 == no_question:
             emit('gameOver')
         else:
+            room_obj.get_question()
             emit('nextQuestion', {'next': question,
                                 'username': username,
                                 'score': score}, room=room_id, include_self=False)
@@ -209,6 +213,7 @@ def handle_endGame(data):
 
 
 
+
 #testing lyrics getting
 
 # from decision_bot import init_pipeline, get_songs, pick_lyrics, pick_song
@@ -226,3 +231,24 @@ def handle_endGame(data):
 
 if __name__ == '__main__':
     socketio.run(app, port=5000, debug=True)
+
+
+# from model import User, Room
+# import scrapper
+#
+# name, tracks = scrapper.get_user_info()
+#
+# user = User("test", tracks, "session")
+# model.online_users["session"] = user
+# room = Room("session", 10, [], 3, 2)
+# model.online_rooms['jdshdkjsh'] = room
+#
+# room.set_questions(pipe)
+# print(room.questions)
+
+
+
+
+
+
+

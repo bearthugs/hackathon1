@@ -1,5 +1,6 @@
 import base64
 import webbrowser
+import random
 from urllib.parse import urlencode, urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import requests
@@ -95,8 +96,31 @@ def get_azlyrics_url(artist_name: str, song_title: str) -> str:
 
 def get_genius_lyrics(artist_name: str, song_title: str) -> Genius:
     genius = Genius("5rJ8VNSRjcdslxEmrwtLwIqIYSwi5aHagreHHC43tPyOHP4vUgWeAuTpr1SHTiVe")
-    song = genius.search_song(song_title, artist_name)
+    song = genius.search_song(song_title, artist_name).lyrics
     return song
+
+def format_song_lyrics(lyrics):
+    ls = lyrics.split("\n")
+    result = []
+    i = 0
+    for line in ls:
+        if not line.startswith("[") and line != "" and i != 0:
+            result.append(line)
+        i += 1
+    return result
+
+def select_lyrics(ls, difficulty):
+    if difficulty == 1:
+        num = 5
+    elif difficulty == 2:
+        num = 3
+    elif difficulty == 3:
+        num = 1
+    starting_index = random.randint(0, len(ls)-num)
+    print(starting_index)
+    selected_lines = ls[starting_index:starting_index+num]
+    return "\n".join(selected_lines)
+
 
 # def get_musixmatch_url(artist_name, song_title):
 #     artist_name = artist_name.replace(" ", "-").lower()
