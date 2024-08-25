@@ -17,14 +17,19 @@ export const Game = () => {
     const [counter, setCounter] = React.useState(5);
     const [users, setUsers] = React.useState([]);
     const [lyrics, setLyrics] = React.useState('');
-    
-   
     React.useEffect(() => {
 
         socket.emit('startGame', code);
-        socket.on('firstQuestion', async (question) => {
 
+        socket.on('firstQuestion', async (question) => {
+            console.log(question)
             setLyrics(question.question)
+            let newUsers = []
+            for (const user of question.users) {
+                newUsers.push({name: user, score: 0, answer: ''})
+            }
+            setUsers(newUsers)
+            console.log(users)  
         })
       }, []);
 
@@ -66,21 +71,11 @@ export const Game = () => {
                 <AnswerField code={code} nav={nav} setLyrics={setLyrics} setUsers={setUsers} users={users}></AnswerField>
             </Box>
             <PlayerBox>
-                <PersonCard></PersonCard>
-                <PeopleBox>
-                    <b>player1</b>
-                    <br></br>
-                    <em>baybeh baybeh baybeh aw</em>
-                    <br></br>
-                    <Box>Score: 1</Box>
-                </PeopleBox>
-                <PeopleBox>
-                    <b>player2</b>
-                    <br></br>
-                    <em>baybeh baybeh baybeh aw</em>
-                    <br></br>
-                    <Box>Score: 1</Box>
-                </PeopleBox>
+                {
+                    users.map((user) => (
+                        <PersonCard name={user.name} score={user.score}></PersonCard>
+                    ))
+                }
             </PlayerBox>
             {/* <Button size='large' variant="contained" color="primary" onClick={() => {nav(`/final/${code}`)}}>Home</Button> */}
         </Box>

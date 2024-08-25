@@ -10,18 +10,20 @@ export const AnswerField = (props) => {
     const handleKeyPress = (e) => {
         if (e.keyCode === 13) {
             // some socket stuff here
-            console.log(code)
+            console.log(answer)
             socket.emit('input', { 'room_id': code, 'session_id': sessionid, 'message': answer })
 
 
             socket.on('gameOver', async (question) => {
               if (typeof question === 'object') {
+                console.log('🤬')
                 nav(`/final/${code}`)
               }
             })
 
            socket.on('nextQuestion', async (question) => {
             if (typeof question === 'object') {
+                console.log('😻')
               let usersNew = []
               for (const user in users) {
                 if (user.name === question.username) {
@@ -37,7 +39,17 @@ export const AnswerField = (props) => {
 
           socket.on('wrongAnswer', async (question) => {
             if (typeof question === 'object') {
-              
+                console.log('🥶')
+                let usersNew = []
+                for (const user in users) {
+                  if (user.name === question.username) {
+                    console.log({name:user.name, score:user.score, answer:answer})
+                    usersNew.push({name:user.name, score:user.score, answer:answer})
+                  } else {
+                    usersNew.push(user)
+                  }
+                }
+                setUsers(usersNew)
             }
           })
         }

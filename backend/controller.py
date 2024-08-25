@@ -143,11 +143,11 @@ def handle_game_start(data):
 
     # question = room_obj.get_question()
     question = ['lyric1', 'lyric2', 'lyric3', 'lyric4']
-    print(users, '🤬')
-    emit('firstQuestion', {'question': question, 'users': users}, room=room_id, include_self=False) # giving game.jsx the first question
+    emit('firstQuestion', {'question': question, 'users': users}, room=room_id) # giving game.jsx the first question
 
 @socketio.on('input')
 def handle_input(data):
+    print('✅')
     session_id = request.sid
     user = model.online_users[session_id]
     room_id = user.get_room_id()
@@ -173,13 +173,16 @@ def handle_input(data):
         no_question = room_obj.get_no_questions()
 
         if current + 1 == no_question:
-            emit('gameOver')
+            print('🤬')
+            emit('gameOver', room=room_id)
         else:
             emit('nextQuestion', {'next': question,
                                 'username': username,
-                                'score': score}, room=room_id, include_self=False)
+                                'score': score}, room=room_id)
+            print('😻')
     else: # the answer was wrong
-        emit('wrongAnswer', room=room_id)
+        emit('wrongAnswer', {'username': username} ,room=room_id)
+        print('🥶')
 
 
 @socketio.on('timeout')
