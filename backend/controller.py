@@ -135,7 +135,8 @@ def handle_game_start(data):
     user = model.online_users[session_id]
     room_id = user.get_room_id()
     room_obj = model.online_rooms[room_id]
-    room_obj.set_questions(pipe)
+    
+    # room_obj.set_questions(pipe)
     user_ids = room_obj.get_users()
 
     users = []
@@ -143,16 +144,22 @@ def handle_game_start(data):
         x = model.online_users[id]
         users.append(x.get_username())
 
-    question = room_obj.get_question()
-    
-    emit('firstQuestion', {'question': question, 'users': users}, room=room_id, include_self=False) # giving game.jsx the first question
+    # question = room_obj.get_question()
+    question = ['lyric1', 'lyric2', 'lyric3', 'lyric4']
+    emit('firstQuestion', {'question': question, 'users': users}, room=room_id) # giving game.jsx the first question
 
 @socketio.on('input')
 def handle_input(data):
+    print('✅')
     session_id = request.sid
     user = model.online_users[session_id]
     room_id = user.get_room_id()
     answer = data['message']
+
+    
+    print(room_id)
+    print(session_id)
+    print(answer)
 
     rc = model.check_answer(room_id, session_id, answer)
 
@@ -169,14 +176,18 @@ def handle_input(data):
         no_question = room_obj.get_no_questions()
 
         if current + 1 == no_question:
-            emit('gameOver')
+            print('🤬')
+            emit('gameOver', room=room_id)
         else:
             room_obj.get_question()
             emit('nextQuestion', {'next': question,
                                 'username': username,
-                                'score': score}, room=room_id, include_self=False)
+                                'score': score}, room=room_id)
+            print('😻')
     else: # the answer was wrong
-        emit('wrongAnswer', room=room_id)
+        emit('wrongAnswer', {'username': username} ,room=room_id)
+        print('🥶')
+
 
 @socketio.on('timeout')
 def handle_timeout(data):
@@ -192,7 +203,7 @@ def handle_timeout(data):
     if current + 1 == no_question:
             emit('gameOver')
     else:
-        emit('nextQuestion', {'next': question,
+        emit('nextQuestion', {'next': 'LYRIC CLAIRE',
                             'username': None,
                             'score': 0}, room=room_id)
 

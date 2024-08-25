@@ -1,12 +1,57 @@
 import React from 'react';
 import { TextField } from '@mui/material';
+import { socket } from '../socket';
+import Cookies from "js-cookie";
 
-export const AnswerField = () => {
+export const AnswerField = (props) => {
+    const { code, nav, setLyrics, setUsers, users } = props
     const [answer, setAnswer] = React.useState('');
+    const sessionid = Cookies.get('session_id');
     const handleKeyPress = (e) => {
         if (e.keyCode === 13) {
             // some socket stuff here
             console.log(answer)
+            socket.emit('input', { 'room_id': code, 'session_id': sessionid, 'message': answer })
+
+
+            socket.on('gameOver', async (question) => {
+              if (typeof question === 'object') {
+                console.log('🤬')
+                nav(`/final/${code}`)
+              }
+            })
+
+           socket.on('nextQuestion', async (question) => {
+            if (typeof question === 'object') {
+                console.log('😻')
+              let usersNew = []
+              for (const user in users) {
+                if (user.name === question.username) {
+                  usersNew.push({name:user.name, score:question.score, answer:answer})
+                } else {
+                  usersNew.push(user)
+                }
+              }
+              setUsers(usersNew)
+              setLyrics(question.next)
+            }
+          })
+
+          socket.on('wrongAnswer', async (question) => {
+            if (typeof question === 'object') {
+                console.log('🥶')
+                let usersNew = []
+                for (const user in users) {
+                  if (user.name === question.username) {
+                    console.log({name:user.name, score:user.score, answer:answer})
+                    usersNew.push({name:user.name, score:user.score, answer:answer})
+                  } else {
+                    usersNew.push(user)
+                  }
+                }
+                setUsers(usersNew)
+            }
+          })
         }
     }
     return (
@@ -17,7 +62,7 @@ export const AnswerField = () => {
           sx: {
             height: '100%',
             textAlign: 'center', 
-            fontSize: '1.5rem',  
+            fontSize: '1.5rem',
             display: 'flex',
             alignItems: 'center',
           }

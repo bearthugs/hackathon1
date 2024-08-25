@@ -9,24 +9,43 @@ import { AnswerField } from '../components/AnswerField';
 import { Lyrics } from '../components/Lyric';
 import { PeopleBox } from '../components/PeopleBox';
 import { useNavigate } from 'react-router-dom';
-
+import { PersonCard } from '../components/PersonCard';
 export const Game = () => {
     let url = window.location.href;
     url = url.split('/');
     const code = url[4];
-    const [counter, setCounter] = React.useState(10);
+    const [counter, setCounter] = React.useState(5);
+    const [users, setUsers] = React.useState([]);
+    const [lyrics, setLyrics] = React.useState('');
+    React.useEffect(() => {
 
-    const [lyrics, setLyrics] = React.useState([]);
-    socket.on('startGame', async (name) => {
-        console.log(name);
-        // setLyrics(newUsers)
-    })
+        socket.emit('startGame', code);
+
+        socket.on('firstQuestion', async (question) => {
+            console.log(question)
+            setLyrics(question.question)
+            let newUsers = []
+            for (const user of question.users) {
+                newUsers.push({name: user, score: 0, answer: ''})
+            }
+            setUsers(newUsers)
+            console.log(users)  
+        })
+      }, []);
+
+
     const nav = useNavigate()
     // Third Attempts
     React.useEffect(() => {
       const timer =
         counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-        counter == 0 && setCounter(10) && socket.emit('timeout')
+        if (counter == 0) {
+            setCounter(5)
+            socket.emit('timeout', code) 
+            socket.on('nextQuestion', async (question) => {
+                setLyrics(question.next)
+            })
+        }
       return () => clearInterval(timer);
     }, [counter]);
 
@@ -38,30 +57,25 @@ export const Game = () => {
     return (
         <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
             <PlayerBox>
-                <h1>{lyrics.question}</h1>
+                {
+                    users.map((user) => (
+                        <PersonCard name={user.name} score={user.score}></PersonCard>
+                    ))
+                }
             </PlayerBox>
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', alignItems: 'center', rowGap: '50px' }}>
                 <div>Countdown: {counter}</div>
                 <LyricBox>
-                    <Lyrics></Lyrics>
+                    <Lyrics lyric={lyrics}></Lyrics>
                 </LyricBox>
-                <AnswerField></AnswerField>
+                <AnswerField code={code} nav={nav} setLyrics={setLyrics} setUsers={setUsers} users={users}></AnswerField>
             </Box>
             <PlayerBox>
-                <PeopleBox>
-                    <b>player1</b>
-                    <br></br>
-                    <em>baybeh baybeh baybeh aw</em>
-                    <br></br>
-                    <Box>Score: 1</Box>
-                </PeopleBox>
-                <PeopleBox>
-                    <b>player2</b>
-                    <br></br>
-                    <em>baybeh baybeh baybeh aw</em>
-                    <br></br>
-                    <Box>Score: 1</Box>
-                </PeopleBox>
+                {
+                    users.map((user) => (
+                        <PersonCard name={user.name} score={user.score}></PersonCard>
+                    ))
+                }
             </PlayerBox>
             {/* <Button size='large' variant="contained" color="primary" onClick={() => {nav(`/final/${code}`)}}>Home</Button> */}
         </Box>

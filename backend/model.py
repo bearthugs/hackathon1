@@ -131,8 +131,7 @@ class Room:
         self.questions = result1 #list of strings to display
     
     def get_question(self) -> str:
-        index = self.current
-        return self.questions[index]
+        return 'LYRICS ADITI'
 
     def inc_question(self):
         self.current += 1
