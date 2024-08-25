@@ -5,6 +5,7 @@ from flask_socketio import SocketIO, join_room, emit, leave_room
 from flask import Flask
 from flask_cors import CORS
 from decision_bot import init_pipeline
+import asyncio
 
 from flask_socketio import SocketIO
 #from decision_bot import init_pipeline
@@ -15,7 +16,7 @@ CORS(app, resources={r"/*": {"origins": "*"}}, allow_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*", allow_credentials=True)
 connected_users = {}
 
-#pipe = init_pipeline()
+pipe = init_pipeline()
 
 @app.route('/authentication', methods=['GET', 'POST'])
 def get_token():
@@ -40,11 +41,11 @@ def get_token():
             return response
 
 @socketio.on('authenticated')
-def handle_auth():
+async def handle_auth():
     print('setting sid')
     print(request.sid)
     emit('set_sid', request.sid)
-    model.get_authentication(request.sid)
+    await model.get_authentication(request.sid)  # Wait for get_authentication to complete
 
 @app.route('/create_room', methods=['POST'])
 def create_code():
@@ -116,27 +117,27 @@ def join():
 
 
 # UNCHECKED SOCKET FUNCTIONS THAT REALLY DON'T ACTUALLY WORK
-@socketio.on('newUser') # a new user has successfuly joined a chat room
-def handle_user_join():
-    session_id = request.sid
-    user = model.online_users[session_id]
-    room_id = user.get_room_id()
-    room_obj = model.online_rooms
-    room_obj.add_user(session_id)
-    print(session_id)
-    user_obj = model.online_users[session_id]
-    username = user_obj.get_name()
-
-    emit('userjoin', {'name': username}, room=room_id, include_self=False) # giving room.jsx the user's username
-
-@socketio.on('startGame') # the game has started
-def handle_game_start(data):
+@socketio.on('newUser')  # a new user has successfully joined a chat room
+def handle_user_join(data):
     session_id = request.sid
     user = model.online_users[session_id]
     room_id = user.get_room_id()
     room_obj = model.online_rooms[room_id]
-    
-    # room_obj.set_questions(pipe)
+    room_obj.add_user(session_id)
+    user_obj = model.online_users[session_id]
+    username = user_obj.get_name()
+
+    emit('userjoin', {'name': username}, room=room_id, include_self=False)  # giving room.jsx the user's username
+
+# Modify the handle_game_start function to be asynchronous
+@socketio.on('startGame')
+async def handle_game_start(pipe, data):
+    session_id = request.sid
+    user = model.online_users[session_id]
+    room_id = user.get_room_id()
+    room_obj = model.online_rooms[room_id]
+
+    await room_obj.set_questions(pipe)  # Wait for set_questions to complete
     user_ids = room_obj.get_users()
 
     users = []
@@ -144,9 +145,9 @@ def handle_game_start(data):
         x = model.online_users[id]
         users.append(x.get_username())
 
-    # question = room_obj.get_question()
-    question = ['lyric1', 'lyric2', 'lyric3', 'lyric4']
-    emit('firstQuestion', {'question': question, 'users': users}, room=room_id) # giving game.jsx the first question
+    question = room_obj.get_question()
+
+    emit('firstQuestion', {'question': question, 'users': users}, room=room_id)  # giving game.jsx the first question
 
 @socketio.on('input')
 def handle_input(data):
@@ -155,6 +156,11 @@ def handle_input(data):
     user = model.online_users[session_id]
     room_id = user.get_room_id()
     answer = data['message']
+
+    print(model.online_rooms[room_id].id)
+
+    print(model.online_rooms[room_id].answers)
+    print(model.online_rooms[room_id].current)
 
     
     print(room_id)
@@ -185,6 +191,8 @@ def handle_input(data):
                                 'score': score}, room=room_id)
             print('😻')
     else: # the answer was wrong
+        user_obj = model.online_users[session_id]
+        username = user_obj.get_username()
         emit('wrongAnswer', {'username': username} ,room=room_id)
         print('🥶')
 
@@ -244,18 +252,18 @@ if __name__ == '__main__':
     socketio.run(app, port=5000, debug=True)
 
 
-# from model import User, Room
-# import scrapper
-#
-# name, tracks = scrapper.get_user_info()
-#
-# user = User("test", tracks, "session")
-# model.online_users["session"] = user
-# room = Room("session", 10, [], 3, 2)
-# model.online_rooms['jdshdkjsh'] = room
-#
-# room.set_questions(pipe)
-# print(room.questions)
+from model import User, Room
+import scrapper
+
+name, tracks = scrapper.get_user_info()
+
+user = User("test", tracks, "session")
+model.online_users["session"] = user
+room = Room("session", 10, [], 3, 2)
+model.online_rooms['jdshdkjsh'] = room
+
+room.set_questions(pipe)
+print(room.questions)
 
 
 

@@ -4,6 +4,7 @@ import random
 from decision_bot import get_songs, pick_song, pick_lyrics
 from flask_socketio import join_room
 import scrapper
+import asyncio
 
 online_users = dict()
 online_rooms = dict()
@@ -100,6 +101,12 @@ class Room:
             obj = online_users[user]
             result += obj.get_top_songs()
         return result
+
+    def test_set(self):
+        self.questions += ['q1', 'q2', 'q3', 'q4']
+        print("adding")
+        self.answers += ['a1', 'a2', 'a3', 'a4']
+        return
     
     def format_song_list(input_string):
         parts = input_string.split("), (")
@@ -110,10 +117,10 @@ class Room:
             result.append((artist, song))
         return result
 
-    def set_questions(self, pipe): #called when the game is ready to start
+    async def set_questions(self, pipe):
         result1 = []
         union_ls = self.union_songs()
-        song_list = get_songs(pipe, union_ls)
+        song_list = await get_songs(pipe, union_ls)  # Assuming get_songs is an async function
         song_list = song_list.split("), (")
         result2 = []
         for part in song_list:
@@ -122,14 +129,13 @@ class Room:
             result2.append((artist, song))
 
         for song in result2:
-            self.answers.append(song[0])
-            lyrics = scrapper.get_genius_lyrics(song[0], song[1])
+            self.answers.append(song[1])
+            lyrics = await scrapper.get_genius_lyrics(song[0], song[1])  # Assuming get_genius_lyrics is an async function
             lyrics = scrapper.format_song_lyrics(lyrics)
             lyrics = scrapper.select_lyrics(lyrics, self.difficulty)
             result1.append(lyrics)
 
-        self.questions = result1 #list of strings to display
-    
+        self.questions = result1  # list of strings to display
     def get_question(self) -> str:
         return 'LYRICS ADITI'
 
@@ -166,10 +172,13 @@ def find_room(room_id, session_id):
     return 0 # The room does not exist
     
 def check_answer(room_id, session_id, user_answer):
-    room_obj = online_rooms.get(room_id)
+    room_obj = online_rooms[room_id]
     correct_answer = room_obj.get_answer()
+    print(correct_answer)
+    print(user_answer)
+    print(room_obj.current)
     if correct_answer == user_answer:
-        user_obj = online_users.get(session_id)
+        user_obj = online_users[session_id]
         user_obj.increment_score()
         room_obj.inc_question() # might not need this
         return 1
@@ -192,10 +201,10 @@ def get_winner(room_id):
     return [winners, max_score]
 
 
-def get_authentication(session_id): #user object
-    username, tracks= scrapper.get_user_info()
+async def get_authentication(session_id):  # user object
+    username, tracks = scrapper.get_user_info()  # Assuming get_user_info is an async function
     user = User(username, tracks, session_id)
-    online_users[session_id] = user #save user into dictionary by session id
+    online_users[session_id] = user  # save user into dictionary by session id
     return
     
     
