@@ -3,6 +3,7 @@ import string
 import random
 from decision_bot import get_songs, pick_song, pick_lyrics
 from flask_socketio import join_room
+import scrapper
 
 online_users = dict()
 online_rooms = dict()
@@ -110,16 +111,24 @@ class Room:
         return result
 
     def set_questions(self, pipe): #called when the game is ready to start
-        result = []
+        result1 = []
         union_ls = self.union_songs()
         song_list = get_songs(pipe, union_ls)
-        formatted_ls = self.format_song_list(song_list)
-        for song in formatted_ls:
-            self.answers.append(song[0])
-            lyrics = pick_lyrics(song, self.get_difficulty)
-            result.append(lyrics)
+        song_list = song_list.split("), (")
+        result2 = []
+        for part in song_list:
+            cleaned_part = part.replace("(", "").replace(")", "").replace("'", "").strip()
+            artist, song = cleaned_part.split(", ")
+            result2.append((artist, song))
 
-        self.questions = result #list of strings to display
+        for song in result2:
+            self.answers.append(song[0])
+            lyrics = scrapper.get_genius_lyrics(song[0], song[1])
+            lyrics = scrapper.format_song_lyrics(lyrics)
+            lyrics = scrapper.select_lyrics(lyrics, self.difficulty)
+            result1.append(lyrics)
+
+        self.questions = result1 #list of strings to display
     
     def get_question(self) -> str:
         index = self.current
