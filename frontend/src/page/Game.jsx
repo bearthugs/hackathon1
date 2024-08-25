@@ -29,7 +29,7 @@ export const Game = () => {
                 newUsers.push({name: user, score: 0, answer: ''})
             }
             setUsers(newUsers)
-            console.log(users)  
+            // console.log(users)  
         })
       }, []);
 
@@ -44,6 +44,7 @@ export const Game = () => {
             socket.emit('timeout', code) 
             socket.on('nextQuestion', async (question) => {
                 setLyrics(question.next)
+                console.log(users)
             })
         }
       return () => clearInterval(timer);
@@ -55,11 +56,11 @@ export const Game = () => {
     //   };
 
     return (
-        <Box sx={{ display: 'flex', padding:'10px', paddingTop: '30px', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', padding:'30px', justifyContent: 'space-evenly', alignItems: 'center', alignContent: 'center' }}>
             <PlayerBox>
                 {
                     users.map((user) => (
-                        <PersonCard name={user.name} score={user.score}></PersonCard>
+                        <PersonCard name={user.name} score={user.score} answer={user.answer}></PersonCard>
                     ))
                 }
             </PlayerBox>
@@ -70,13 +71,6 @@ export const Game = () => {
                 </LyricBox>
                 <AnswerField code={code} nav={nav} setLyrics={setLyrics} setUsers={setUsers} users={users}></AnswerField>
             </Box>
-            <PlayerBox>
-                {
-                    users.map((user) => (
-                        <PersonCard name={user.name} score={user.score}></PersonCard>
-                    ))
-                }
-            </PlayerBox>
             {/* <Button size='large' variant="contained" color="primary" onClick={() => {nav(`/final/${code}`)}}>Home</Button> */}
         </Box>
     )

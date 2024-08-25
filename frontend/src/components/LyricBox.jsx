@@ -5,7 +5,7 @@ export const LyricBox = styled(Box)(({ theme }) =>({
     flexDirection: 'column',
     rowGap: '20px',
     alignContent: 'space-between',
-    border: '1px solid black',
+    // border: '1px solid black',
     height: '45vh',
     width: '50vw',
     padding: '15px',

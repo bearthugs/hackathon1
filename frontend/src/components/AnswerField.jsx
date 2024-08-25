@@ -24,14 +24,16 @@ export const AnswerField = (props) => {
            socket.on('nextQuestion', async (question) => {
             if (typeof question === 'object') {
                 console.log('😻')
-              let usersNew = []
-              for (const user in users) {
-                if (user.name === question.username) {
-                  usersNew.push({name:user.name, score:question.score, answer:answer})
-                } else {
-                  usersNew.push(user)
+                let usersNew = []
+                for (const user of users) {
+                    // console.log(user, question)
+                    console.log(question.username)
+                    // if (user.name === user.name) {
+                    usersNew.push({name:user.name, score:question.score, answer:answer})
+                    // } else {
+                    // usersNew.push(user)
+                    // }
                 }
-              }
               setUsers(usersNew)
               setLyrics(question.next)
             }
